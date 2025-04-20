@@ -4,6 +4,20 @@ let keyboard = new Keyboard(); // Input handler
 let intervalIds = []; // Array to store all interval IDs
 let isGameActive = true; // New flag to track if game is active
 
+function checkOrientation() {
+  let rotationMessage = document.getElementById('rotation_message');
+  if (window.innerWidth < 720 && window.innerHeight > window.innerWidth) {
+    rotationMessage.classList.remove('d_none');
+  } else {
+    rotationMessage.classList.add('d_none');
+  }
+}
+
+// Check orientation on page load and when resizing
+window.addEventListener('load', checkOrientation);
+window.addEventListener('resize', checkOrientation);
+window.addEventListener('orientationchange', checkOrientation);
+
 function setStoppableInterval(fn, time) {
   let id = setInterval(fn, time);
   intervalIds.push(id);

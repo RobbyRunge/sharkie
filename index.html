@@ -36,10 +36,10 @@
 </head>
 <body onload="init()"> <!-- delete onload before finish -->
   <div id="background_overlay">
-    <button id="close_overlay_btn" class="menu_button d_none" onclick="closeOverlay()">CLOSE</button>
+    <button id="close_overlay_btn" class="close_button d_none" onclick="closeOverlay()">&#10006;</button>
   </div>
 
-  <div id="start_screen" class="start_screen d_none"> <!-- delete d_none before finish -->
+  <div id="start_screen" class="start_screen"> <!-- delete d_none before finish -->
     <div class="menu">
       <h1>SHARKIE</h1>
       <button class="menu_button" onclick="startGame(), init()">START GAME</button>
@@ -120,6 +120,14 @@
         <img src="./img/assets/speed.png" alt="speed boost" class="img_size_control" onclick="world.character.multiplySpeedByCollectCoins()">
         <img src="./img/assets/posion.png" alt="throw posion" class="img_size_control" onclick="world.character.startShooting()">
         <img src="./img/assets/shark.png" alt="fin slap" class="img_size_control" onclick="world.character.startSlapping()">
+      </div>
+    </div>
+
+    <div id="rotation_message" class="d_none">
+      <div class="rotation_content">
+        <div class="rotation_icon">↻</div>
+        <p>Please rotate your device</p>
+        <p>for the best experience</p>
       </div>
     </div>
 
