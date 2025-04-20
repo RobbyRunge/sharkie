@@ -33,6 +33,37 @@ function init() {
   world = new World(canvas, keyboard);
 }
 
+function handleFullscreen() {
+  const canvas = document.getElementById('game_container');
+  if (!document.fullscreenElement) {
+    openFullscreen(canvas);
+  } else {
+    closeFullscreen();
+  }
+}
+
+function openFullscreen(element) {
+  if (element.requestFullscreen) {
+    element.requestFullscreen();
+  } else if (element.webkitRequestFullscreen) {
+    element.webkitRequestFullscreen();
+  } else if (element.msRequestFullscreen) {
+    element.msRequestFullscreen();
+  }
+}
+
+function closeFullscreen() {
+  if (document.fullscreenElement || document.webkitFullscreenElement || document.msFullscreenElement) {
+    if (document.exitFullscreen) {
+      document.exitFullscreen();
+    } else if (document.webkitExitFullscreen) { 
+      document.webkitExitFullscreen();
+    } else if (document.msExitFullscreen) { 
+      document.msExitFullscreen();
+    }
+  }
+}
+
 // Event listeners for keydown events - set corresponding keyboard properties to true
 window.addEventListener('keydown', (event => {  
   switch(event.code) {
