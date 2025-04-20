@@ -85,12 +85,35 @@
 
     <div class="control_container d_none">
       <div class="img_movement">
-        <p class="control_button_design">&#11164</p>
+        <button class="control_button_design" 
+          onmousedown="keyboard.LEFT = true" 
+          onmouseup="keyboard.LEFT = false" 
+          onmouseleave="keyboard.LEFT = false"
+          ontouchstart="keyboard.LEFT = true" 
+          ontouchend="keyboard.LEFT = false">&#11164</button>
+        
         <div class="keys_column">        
-          <p class="control_button_design">&#11165</p>
-          <p class="control_button_design">&#11167</p>
+          <button class="control_button_design" 
+            onmousedown="keyboard.UP = true" 
+            onmouseup="keyboard.UP = false" 
+            onmouseleave="keyboard.UP = false"
+            ontouchstart="keyboard.UP = true" 
+            ontouchend="keyboard.UP = false">&#11165</button>
+            
+          <button class="control_button_design" 
+            onmousedown="keyboard.DOWN = true" 
+            onmouseup="keyboard.DOWN = false" 
+            onmouseleave="keyboard.DOWN = false"
+            ontouchstart="keyboard.DOWN = true" 
+            ontouchend="keyboard.DOWN = false">&#11167</button>
         </div>
-        <p class="control_button_design">&#11166</p>
+        
+        <button class="control_button_design" 
+          onmousedown="keyboard.RIGHT = true" 
+          onmouseup="keyboard.RIGHT = false" 
+          onmouseleave="keyboard.RIGHT = false"
+          ontouchstart="keyboard.RIGHT = true" 
+          ontouchend="keyboard.RIGHT = false">&#11166</button>
       </div>
       <div class="img_positiom_control_container">
         <img src="./img/assets/speed.png" alt="speed boost" class="img_size_control" onclick="world.character.multiplySpeedByCollectCoins()">
