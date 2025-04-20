@@ -21,50 +21,54 @@ function init() {
 
 // Event listeners for keydown events - set corresponding keyboard properties to true
 window.addEventListener('keydown', (event => {  
-  if(event.code == 'ArrowLeft') {
-    keyboard.LEFT = true;
-  }
-  if(event.code == 'ArrowRight') {
-    keyboard.RIGHT = true;
-  }
-  if(event.code == 'ArrowUp') {
-    keyboard.UP = true;
-  }
-  if(event.code == 'ArrowDown') {
-    keyboard.DOWN = true;
-  }
-  if(event.code == 'Space') {
-    keyboard.SPACE = true;
-  } 
-  if(event.code == 'KeyD') {
-    keyboard.D = true;
-  }
-  if(event.code == 'KeyE') {
-    keyboard.E = true;
+  switch(event.code) {
+    case 'ArrowLeft':
+      keyboard.LEFT = true;
+      break;
+    case 'ArrowRight':
+      keyboard.RIGHT = true;
+      break;
+    case 'ArrowUp':
+      keyboard.UP = true;
+      break;
+    case 'ArrowDown':
+      keyboard.DOWN = true;
+      break;
+    case 'Space':
+      keyboard.SPACE = true;
+      break;
+    case 'KeyD':
+      keyboard.D = true;
+      break;
+    case 'KeyE':
+      keyboard.E = true;
+      break;
   }
 }));
 
 // Event listeners for keyup events - set corresponding keyboard properties to false
 window.addEventListener('keyup', (event => {
-  if(event.code == 'ArrowLeft') {
-    keyboard.LEFT = false;
-  }
-  if(event.code == 'ArrowRight') {
-    keyboard.RIGHT = false;
-  }
-  if(event.code == 'ArrowUp') {
-    keyboard.UP = false;
-  }
-  if(event.code == 'ArrowDown') {
-    keyboard.DOWN = false;
-  }
-  if(event.code == 'Space') {
-    keyboard.SPACE = false;
-  }
-  if (event.code == 'KeyD') {
-    keyboard.D = false;
-  }
-  if(event.code == 'KeyE') {
-    keyboard.E = false;
+  switch(event.code) {
+    case 'ArrowLeft':
+      keyboard.LEFT = false;
+      break;
+    case 'ArrowRight':
+      keyboard.RIGHT = false;
+      break;
+    case 'ArrowUp':
+      keyboard.UP = false;
+      break;
+    case 'ArrowDown':
+      keyboard.DOWN = false;
+      break;
+    case 'Space':
+      keyboard.SPACE = false;
+      break;
+    case 'KeyD':
+      keyboard.D = false;
+      break;
+    case 'KeyE':
+      keyboard.E = false;
+      break;
   }
 }));
