@@ -263,13 +263,12 @@ ul {
     padding: 0 15px;
     box-sizing: border-box;
     display: flex;
-    align-items: center;
+    align-items: flex-end;
     justify-content: space-between;
   }
 
   .img_positiom_control_container {
     display: flex;
-    align-items: center;
     gap: 20px;
   }
 
@@ -291,12 +290,18 @@ ul {
     align-items: center;
     justify-content: center;
     background-color: rgba(255, 255, 255, 0.8);
+    cursor: pointer;
+    border: none;
     border-radius: 12px;
     padding: 3px;
-    font-size: larger;
+    font-size: 32px;
     width: 40px;
     height: 40px;
   } 
+
+  .position_icon {
+    padding-left: 6px;
+  }
 
   .img_size_control {
     width: 32px;

@@ -93,14 +93,14 @@
           ontouchend="keyboard.LEFT = false">&#11164</button>
         
         <div class="keys_column">        
-          <button class="control_button_design" 
+          <button class="control_button_design position_icon" 
             onmousedown="keyboard.UP = true" 
             onmouseup="keyboard.UP = false" 
             onmouseleave="keyboard.UP = false"
             ontouchstart="keyboard.UP = true" 
             ontouchend="keyboard.UP = false">&#11165</button>
             
-          <button class="control_button_design" 
+          <button class="control_button_design position_icon" 
             onmousedown="keyboard.DOWN = true" 
             onmouseup="keyboard.DOWN = false" 
             onmouseleave="keyboard.DOWN = false"
@@ -108,13 +108,14 @@
             ontouchend="keyboard.DOWN = false">&#11167</button>
         </div>
         
-        <button class="control_button_design" 
+        <button class="control_button_design position_icon" 
           onmousedown="keyboard.RIGHT = true" 
           onmouseup="keyboard.RIGHT = false" 
           onmouseleave="keyboard.RIGHT = false"
           ontouchstart="keyboard.RIGHT = true" 
           ontouchend="keyboard.RIGHT = false">&#11166</button>
       </div>
+      
       <div class="img_positiom_control_container">
         <img src="./img/assets/speed.png" alt="speed boost" class="img_size_control" onclick="world.character.multiplySpeedByCollectCoins()">
         <img src="./img/assets/posion.png" alt="throw posion" class="img_size_control" onclick="world.character.startShooting()">
