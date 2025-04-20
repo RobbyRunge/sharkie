@@ -264,7 +264,7 @@ ul {
     box-sizing: border-box;
     display: flex;
     align-items: center;
-    justify-content: flex-end;
+    justify-content: space-between;
   }
 
   .img_positiom_control_container {
@@ -272,6 +272,31 @@ ul {
     align-items: center;
     gap: 20px;
   }
+
+  .img_movement {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 24px;
+    color: black;
+  }
+
+  .keys_column {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .control_button_design {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(255, 255, 255, 0.8);
+    border-radius: 12px;
+    padding: 3px;
+    width: 32px;
+    height: 32px;
+  } 
 
   .img_size_control {
     width: 32px;
