@@ -29,13 +29,6 @@ class AudioManager {
     }
   }
 
-  stopBackgroundMusic() {
-    if (this.backgroundMusic) {
-        this.backgroundMusic.pause();
-        this.backgroundMusic.currentTime = 0;
-    }
-  }
-
   setVolume(name, volume) {
     if (this.sounds[name]) {
         this.sounds[name].volume = volume; // 0.0 to 1.0
