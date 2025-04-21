@@ -176,7 +176,7 @@ ul {
 
 .img_position_container {
   position: absolute;
-  bottom: 24%;
+  bottom: 2%;
   left: 0;
   right: 0;
   width: 100%;
@@ -281,11 +281,64 @@ ul {
   to { transform: scale(1.1); }
 }
 
+/* Position controls relative to the canvas */
+#game_container {
+  position: relative; /* Add this to make absolute positioning work relative to container */
+}
+
+.control_container {
+  position: absolute;
+  bottom: 5%; /* Use percentage instead of fixed px */
+  left: 0;
+  right: 0;
+  width: 90%; /* Use percentage instead of fixed max-width */
+  margin: 0 auto;
+  padding: 0 15px;
+  box-sizing: border-box;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  z-index: 10;
+  display: none;
+}
+
+/* Improved responsive scaling for buttons */
+.control_button_design {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(255, 255, 255, 0.7);
+  cursor: pointer;
+  border: none;
+  border-radius: 12px;
+  padding: 0;
+  font-size: calc(16px + 1vmin); /* Responsive font size */
+  width: calc(30px + 1vmin);    /* Responsive width */
+  height: calc(30px + 1vmin);   /* Responsive height */
+  transition: background-color 0.2s;
+}
+
+.control_button_design:active {
+  background-color: rgba(100, 200, 255, 0.9);
+}
+
+.img_size_control {
+  width: calc(28px + 1vmin);
+  height: calc(28px + 1vmin);
+  background-color: rgba(255, 255, 255, 0.7);
+  transition: transform 0.2s, background-color 0.2s;
+}
+
+.img_size_control:active {
+  transform: scale(0.9);
+  background-color: rgba(100, 200, 255, 0.9);
+}
+
 @media only screen and (max-width: 1300px) {
   .img_position_container {
     justify-content: flex-end;
     gap: 10px;
-    top: -23%;
+    top: -88%;
     bottom: none;
   }
 
@@ -296,17 +349,19 @@ ul {
 
   .control_container {
     position: absolute;
-    bottom: 25%;
+    bottom: 2%;
     left: 0;
     right: 0;
     width: 100%;
-    max-width: 720px; /* Match your canvas width */
+    max-width: 720px;
     margin: 0 auto;
     padding: 0 15px;
     box-sizing: border-box;
     display: flex;
     align-items: flex-end;
     justify-content: space-between;
+    pointer-events: auto;
+    z-index: 10;
   }
 
   .img_positiom_control_container {
@@ -365,7 +420,6 @@ ul {
     display: flex;
   }
   
-  /* Hide the game content when in portrait mode */
   canvas {
     opacity: 0.2;
     width: 100%;
@@ -381,5 +435,34 @@ ul {
 @media only screen and (max-height: 480px) {
   canvas {
     height: 100vh;
+  }
+}
+
+/* Landscape orientation adjustments */
+@media (orientation: landscape) and (max-height: 500px) {
+  .control_container {
+    bottom: 2%;
+  }
+  
+  .control_button_design {
+    width: calc(24px + 1vmin);
+    height: calc(24px + 1vmin);
+  }
+  
+  .img_size_control {
+    width: calc(22px + 1vmin);
+    height: calc(22px + 1vmin);
+  }
+}
+
+/* For smaller width screens */
+@media screen and (max-width: 500px) {
+  .img_movement,
+  .img_positiom_control_container {
+    gap: 6px;
+  }
+  
+  .control_container {
+    padding: 0 8px;
   }
 }
