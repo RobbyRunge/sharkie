@@ -321,6 +321,8 @@ class World {
   }
   
   showGameOverScreen() {
+    audioManager.playSound('game_over');
+    audioManager.setVolume('game_over', 0.3);
     // Insert template into DOM
     document.body.insertAdjacentHTML('beforeend', getGameOverTemplate());
     // Add event listeners

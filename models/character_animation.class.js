@@ -212,6 +212,8 @@ class CharacterAnimation {
 
   startSlapping() {
     if (!this.isSlapping) {
+      audioManager.playSound('slap');
+      audioManager.setVolume('slap', 0.3);
       this.idleTime = 0;
       this.isInSleepMode = false;
       this.sleepCycleComplete = false;
