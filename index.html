@@ -29,12 +29,13 @@
   <script src="./models/endboss.class.js"></script>
   <script src="./models/posion.class.js"></script>
   <script src="./models/coin.class.js"></script>
+  <script src="./models/audio.class.js"></script>
   <script src="./levels/level_1.js"></script>
   <script src="./js/game.js"></script>
   <script src="./js/menu.js"></script>
   <script src="./js/template.js"></script>
 </head>
-<body onload="init()"> <!-- delete onload before finish -->
+<body> <!-- delete onload before finish -->
   <div id="background_overlay">
     <button id="close_overlay_btn" class="close_button d_none" onclick="closeOverlay()">&#10006;</button>
   </div>
@@ -79,7 +80,7 @@
       <img class="img_size" src="./img/assets/skip-back-svgrepo-com.svg" alt="back to start" onclick="goBackToStartscreen()">
       <div class="sound_and_fullscreen_position">
         <img class="img_size fullscreen_content" src="./img/assets/fullscreen-svgrepo-com.svg" alt="fullscreen on/off" onclick="handleFullscreen()">
-        <img src="./img/assets/sound-off-svgrepo-com.svg" alt="sound on/off" id="sound_icon" class="img_size sound_content">
+        <img src="./img/assets/sound-svgrepo-com.svg" alt="sound on/off" id="sound_icon" class="img_size sound_content">
       </div>
     </div>
 

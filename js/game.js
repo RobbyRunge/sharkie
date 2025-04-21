@@ -3,6 +3,7 @@ let world; // Game world object
 let keyboard = new Keyboard(); // Input handler
 let intervalIds = []; // Array to store all interval IDs
 let isGameActive = true; // New flag to track if game is active
+let audioManager; // Audio manager instance
 
 function checkOrientation() {
   let rotationMessage = document.getElementById('rotation_message');
@@ -25,12 +26,39 @@ function setStoppableInterval(fn, time) {
 }
 
 function init() {
-  // Initialize game by creating world with canvas and keyboard
   intervalIds = []; // Reset intervals array
   isGameActive = true; // Reset game state
+  audioManager = new AudioManager();
+  loadSounds();
   initLevel();
   canvas = document.getElementById("canvas");
   world = new World(canvas, keyboard);
+}
+
+function loadSounds() {
+  // Load your underwater ambient sound
+  audioManager.loadSound('background', 'audio/underwater-ambiencewav-14428.mp3');
+  // Start background music with reduced volume for ambience
+  audioManager.setVolume('background', 0.3);
+  audioManager.playBackgroundMusic('background');
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  const soundIcon = document.getElementById('sound_icon');
+  if (soundIcon) {
+    soundIcon.addEventListener('click', toggleSound);
+  }
+});
+
+function toggleSound() {
+  if (!audioManager) return;
+  const isMuted = audioManager.toggleMute();
+  const soundIcon = document.getElementById('sound_icon');
+  if (isMuted) {
+    soundIcon.src = './img/assets/sound-off-svgrepo-com.svg';
+  } else {
+    soundIcon.src = './img/assets/sound-svgrepo-com.svg';
+  }
 }
 
 function handleFullscreen() {

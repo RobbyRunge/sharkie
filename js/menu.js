@@ -12,6 +12,7 @@ function goBackToStartscreen() {
   resetWorldState();
   closeOverlay();
   closeFullscreen();
+  audioManager.stopAllSounds(); // Toggle sound back to original state
 }
 
 function resetWorldState() {

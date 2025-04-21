@@ -317,9 +317,8 @@ class World {
   stopGame() {
     isGameActive = false;
     intervalIds.forEach(clearInterval);
-    console.log('Game stopped - all intervals cleared');
+    audioManager.stopAllSounds();
   }
-  
   
   showGameOverScreen() {
     // Insert template into DOM
