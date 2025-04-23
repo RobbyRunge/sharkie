@@ -10,6 +10,13 @@ class Endboss extends MoveableObject {
   lastAttackTime = 0; // Track when the last attack finished
   attackCooldown = 2000; // 2 seconds cooldown
   currentAttackFrame = 0; // Track which frame of attack animation is playing
+  
+  // Add properties for hit system
+  energy = 100; // Health - 5 hits of 20 damage each to kill
+  isHit = false; // Track if currently in hit animation
+  hitAnimationTimer = 0; // Timer for hit animation
+  isDying = false; // Track if dying
+  deathAnimationIndex = 0; // Track death animation progress
 
   IMAGES_SPAWNING = [
     // Spawning animation frames
@@ -60,6 +67,16 @@ class Endboss extends MoveableObject {
     './img/2.Enemy/3.Final_Enemy/Hurt/4.png',
   ];
 
+  IMAGES_DEAD = [
+    // Dead animation frames
+    './img/2.Enemy/3.Final_Enemy/Dead/Mesa de trabajo 2 copia 6.png',
+    './img/2.Enemy/3.Final_Enemy/Dead/Mesa de trabajo 2 copia 7.png',
+    './img/2.Enemy/3.Final_Enemy/Dead/Mesa de trabajo 2 copia 8.png',
+    './img/2.Enemy/3.Final_Enemy/Dead/Mesa de trabajo 2 copia 9.png',
+    './img/2.Enemy/3.Final_Enemy/Dead/Mesa de trabajo 2 copia 10.png',
+    './img/2.Enemy/3.Final_Enemy/Dead/Mesa de trabajo 2.png'
+  ];
+
   constructor() {
     // Initialize position and animations
     super().loadImage('img/2.Enemy/3.Final_Enemy/1.Introduce/1.png'); // Load first image but don't show yet
@@ -67,6 +84,7 @@ class Endboss extends MoveableObject {
     this.loadImages(this.IMAGES_SPAWNING);
     this.loadImages(this.IMAGES_ATTACK);
     this.loadImages(this.IMAGES_HIT);
+    this.loadImages(this.IMAGES_DEAD); // Load death animation images
     this.x = 2400;
     this.offsetTop = 125;
     this.offsetBottom = 70;
@@ -80,13 +98,57 @@ class Endboss extends MoveableObject {
     this.animationStarted = false;
     setStoppableInterval(() => {
       if (!isGameActive) return;      
-      console.log('Character X:', world.character.x); // Debugging line to check character position
       this.checkFirstContact();
       if (this.visible) {
         this.playAnimations();
-        this.checkAttackRange(); // Check if within attack range
+        if (!this.isDying && !this.isHit) {
+          this.checkAttackRange(); // Only check attack range when not hit or dying
+        }
       }
     }, 120);
+  }
+
+  hit(damage = 20, attackType = 'bottle') {
+    // Skip if already dying
+    if (this.isDying) {
+      return;
+    }
+    // Apply damage (ensure we don't go below 0)
+    this.energy -= damage;
+    if (this.energy < 0) this.energy = 0;
+    // Check if this hit killed the boss
+    if (this.energy <= 0) {
+      this.die();
+      return;
+    }
+    // Start hit animation
+    this.isHit = true;
+    this.isAttacking = false; // Interrupt attack if in progress
+    this.hitAnimationTimer = 0;
+    // Different reactions based on attack type
+    if (attackType === 'bottle') {
+      // React to bottle - maybe a stronger push back
+      this.x += 15; // Push back when hit by bottle
+      this.speed = 0; // Slow down after being hit
+      setTimeout(() => {
+        this.speed = 0.8;
+      }, 1000); // Reset position after 1 second
+    } else if (attackType === 'slap') {
+      // React to slap - less push back but more visual effect
+      this.x += 5; // Smaller push back for slap
+      // Add visual effect like flashing red
+    }
+    // Debug info
+    console.log(`Endboss hit by ${attackType}! Health: ${this.energy}/100`);
+  }
+
+  die() {
+    console.log('Endboss dying!');
+    this.isDying = true;
+    this.isHit = false;
+    this.isAttacking = false;
+    this.speed = 0; // Stop movement
+    this.deathAnimationIndex = 0;
   }
 
   checkAttackRange() {
@@ -112,7 +174,6 @@ class Endboss extends MoveableObject {
     this.isAttacking = false;
   }
 
-
   checkFirstContact() {
     if (world.character.x > 2000 && !this.hadFirstContact) {
       this.visible = true; // Make boss visible
@@ -125,20 +186,23 @@ class Endboss extends MoveableObject {
 
   startMovementEndboss() {
     setStoppableInterval(() => {
-        if (isGameActive && !this.isDying) {
-            this.x -= this.speed;
-        }
+      if (isGameActive && !this.isDying) {
+        this.x -= this.speed;
+      }
     }, 1000/60);
   }
 
   playAnimations() {
-    if (this.animationStarted && this.animationFrame < 10) {
+    if (this.isDying) {
+      this.playDeathAnimation();
+    } else if (this.isHit) {
+      this.playHitAnimation();
+    } else if (this.animationStarted && this.animationFrame < 10) {
       // Play spawning animation first
       this.playAnimation(this.IMAGES_SPAWNING);
     } else if (this.isAttacking) {
       // Play attack animation
       this.playAnimation(this.IMAGES_ATTACK);
-      
       // Track attack frame and handle attack completion
       this.currentAttackFrame++;
       if (this.currentAttackFrame >= this.IMAGES_ATTACK.length) {
@@ -153,7 +217,34 @@ class Endboss extends MoveableObject {
     if (this.animationStarted) this.animationFrame++;
   }
 
-  // Override the draw method from parent class
+  playHitAnimation() {
+    // Play through hit images
+    let index = Math.min(Math.floor(this.hitAnimationTimer / 2), this.IMAGES_HIT.length - 1);
+    this.img = this.imageCache[this.IMAGES_HIT[index]];
+    // Increment timer and check if animation is complete
+    this.hitAnimationTimer++;
+    if (this.hitAnimationTimer >= this.IMAGES_HIT.length * 2) {
+      this.isHit = false;
+      this.hitAnimationTimer = 0;
+    }
+  }
+
+  playDeathAnimation() {
+    if (this.deathAnimationIndex < this.IMAGES_DEAD.length) {
+      this.img = this.imageCache[this.IMAGES_DEAD[this.deathAnimationIndex]];
+      // Slow down death animation by changing frame every 3 cycles
+      if (this.animationFrame % 3 === 0) {
+        this.deathAnimationIndex++;
+      }
+    }
+    // After death animation completes, you could trigger game win state
+    if (this.deathAnimationIndex >= this.IMAGES_DEAD.length) {
+      // Add any game victory logic here
+      // For example: world.gameWon = true;
+    }
+  }
+
+  // Add visual effect when drawing
   draw(ctx) {
     if (this.visible) {
       super.draw(ctx); // Only draw if visible
