@@ -354,6 +354,28 @@ class World {
     });
   }
 
+  showWinScreen() {
+    // Stop the game
+    this.stopGame();
+    
+    // Play victory sound (you could add a victory sound to audioManager)
+    // audioManager.playSound('victory');
+    
+    // Insert template into DOM
+    document.body.insertAdjacentHTML('beforeend', getWinTemplate());
+    
+    // Add event listeners for buttons
+    document.getElementById('play_again_button').addEventListener('click', () => {
+      document.getElementById('win_screen').remove();
+      init();
+    });
+    
+    document.getElementById('win_menu_button').addEventListener('click', () => {
+      document.getElementById('win_screen').remove();
+      goBackToStartscreen();
+    });
+  }
+
   // Add this new method
   checkSpeedBoost() {
     if (this.keyboard.E) {

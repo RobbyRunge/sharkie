@@ -246,6 +246,35 @@ ul {
   margin-top: 20px;
 }
 
+#win_screen {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.8);
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: white;
+}
+
+#win_screen h1 {
+  margin-bottom: 20px;
+  color: gold; /* Make the win message gold colored */
+}
+
+#win_screen p {
+  margin-bottom: 20px;
+  font-size: 24px;
+}
+
+#win_screen .menu_button.main-menu {
+  margin-top: 20px;
+}
+
 #rotation_message {
   position: fixed;
   top: 0;
