@@ -38,7 +38,8 @@ function init() {
 function loadSounds() {
   // Load your underwater ambient sound
   audioManager.loadSound('background', 'audio/underwater-ambiencewav-14428.mp3');
-  audioManager.loadSound('game_over', 'audio/marimba-lose-250960.mp3')
+  audioManager.loadSound('game_over', 'audio/marimba-lose-250960.mp3');
+  // audioManager.loadSound('movement', 'audio/underwater-movement-whoosh-4-186901.mp3'); // look again or for a better one
   audioManager.loadSound('slap', 'audio/underwater-movement-whoosh-1-186898.mp3');
   // Start background music with reduced volume for ambience
   audioManager.setVolume('background', 0.3);

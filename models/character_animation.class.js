@@ -333,6 +333,8 @@ class CharacterAnimation {
   }
 
   handleMovementAnimation(now) {
+    // audioManager.playSound('movement');
+    // audioManager.setVolume('movement', 0.1);
     // Reset idle time when moving
     this.idleTime = 0;
     this.isInSleepMode = false;
