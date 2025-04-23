@@ -3,6 +3,7 @@ class Endboss extends MoveableObject {
   height = 500;
   y = -70;
   width = 350;
+  speed = 0.8; // Speed of the endboss
   hadFirstContact = false; // Flag to check if the endboss has made first contact with the character
   visible = false; // Add this flag to track visibility
 
@@ -37,11 +38,31 @@ class Endboss extends MoveableObject {
     './img/2.Enemy/3.Final_Enemy/2.floating/13.png',
   ];
 
+  IMAGES_ATTACK = [
+    // Attack animation frames
+    './img/2.Enemy/3.Final_Enemy/Attack/1.png',
+    './img/2.Enemy/3.Final_Enemy/Attack/2.png',
+    './img/2.Enemy/3.Final_Enemy/Attack/3.png',
+    './img/2.Enemy/3.Final_Enemy/Attack/4.png',
+    './img/2.Enemy/3.Final_Enemy/Attack/5.png',
+    './img/2.Enemy/3.Final_Enemy/Attack/6.png',
+  ];
+
+  IMAGES_HIT = [
+    // Hit animation frames
+    './img/2.Enemy/3.Final_Enemy/Hurt/1.png',
+    './img/2.Enemy/3.Final_Enemy/Hurt/2.png',
+    './img/2.Enemy/3.Final_Enemy/Hurt/3.png',
+    './img/2.Enemy/3.Final_Enemy/Hurt/4.png',
+  ];
+
   constructor() {
     // Initialize position and animations
     super().loadImage('img/2.Enemy/3.Final_Enemy/1.Introduce/1.png'); // Load first image but don't show yet
     this.loadImages(this.IMAGES_STAND);
     this.loadImages(this.IMAGES_SPAWNING);
+    this.loadImages(this.IMAGES_ATTACK);
+    this.loadImages(this.IMAGES_HIT);
     this.x = 2400;
     this.offsetTop = 125;
     this.offsetBottom = 70;
@@ -69,7 +90,16 @@ class Endboss extends MoveableObject {
       this.hadFirstContact = true; // Set the flag to true after first contact
       this.animationStarted = true; // Start animation sequence
       this.animationFrame = 0; // Ensure we start from the beginning of the spawning animation
+      this.startMovementEndboss();
     }
+  }
+
+  startMovementEndboss() {
+    setStoppableInterval(() => {
+        if (isGameActive && !this.isDying) {
+            this.x -= this.speed;
+        }
+    }, 1000/60);
   }
 
   playAnimations() {

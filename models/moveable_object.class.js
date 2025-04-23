@@ -41,7 +41,7 @@ class MoveableObject extends DrawableObject {
             this.x -= this.speed;
         }
     }, 1000/60);
-}
+  }
 
   playAnimation(images) {
     // Only animate if game is active and images array exists
