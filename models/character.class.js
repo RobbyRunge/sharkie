@@ -5,7 +5,7 @@ class Character extends MoveableObject {
   height = 200;
   y = 100;
   world;
-  speed = 1;
+  speed = 6; // reset to 1 when your are finished with the game
   rotation = 0; // Track current rotation angle in degrees
   bottles = 0; // Track collected poison bottles
   maxBottles = 5; // Maximum number of bottles to collect

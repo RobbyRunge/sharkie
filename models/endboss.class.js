@@ -6,6 +6,10 @@ class Endboss extends MoveableObject {
   speed = 0.8; // Speed of the endboss
   hadFirstContact = false; // Flag to check if the endboss has made first contact with the character
   visible = false; // Add this flag to track visibility
+  isAttacking = false; // Add this property to track attack state
+  lastAttackTime = 0; // Track when the last attack finished
+  attackCooldown = 2000; // 2 seconds cooldown
+  currentAttackFrame = 0; // Track which frame of attack animation is playing
 
   IMAGES_SPAWNING = [
     // Spawning animation frames
@@ -80,9 +84,34 @@ class Endboss extends MoveableObject {
       this.checkFirstContact();
       if (this.visible) {
         this.playAnimations();
+        this.checkAttackRange(); // Check if within attack range
       }
     }, 120);
   }
+
+  checkAttackRange() {
+    const currentTime = new Date().getTime();
+    const cooldownElapsed = currentTime - this.lastAttackTime > this.attackCooldown;
+    const inAttackRange = world.character.x < this.x + 350 && world.character.x > this.x - 350;
+    // Start attack if in range and cooldown has elapsed
+    if (inAttackRange && !this.isAttacking && cooldownElapsed) {
+      this.startAttackAnimation();
+    }
+    // End attack if out of range (even during attack)
+    else if (!inAttackRange && this.isAttacking) {
+      this.endAttackAnimation();
+    }
+  }
+
+  startAttackAnimation() {
+    this.isAttacking = true;
+    this.currentAttackFrame = 0; // Reset attack animation frame
+  }
+
+  endAttackAnimation() {
+    this.isAttacking = false;
+  }
+
 
   checkFirstContact() {
     if (world.character.x > 2000 && !this.hadFirstContact) {
@@ -106,8 +135,19 @@ class Endboss extends MoveableObject {
     if (this.animationStarted && this.animationFrame < 10) {
       // Play spawning animation first
       this.playAnimation(this.IMAGES_SPAWNING);
+    } else if (this.isAttacking) {
+      // Play attack animation
+      this.playAnimation(this.IMAGES_ATTACK);
+      
+      // Track attack frame and handle attack completion
+      this.currentAttackFrame++;
+      if (this.currentAttackFrame >= this.IMAGES_ATTACK.length) {
+        this.lastAttackTime = new Date().getTime();
+        this.isAttacking = false;
+        this.currentAttackFrame = 0;
+      }
     } else {
-      // Switch to standing animation after spawning completes
+      // Switch to standing animation
       this.playAnimation(this.IMAGES_STAND);
     }
     if (this.animationStarted) this.animationFrame++;
