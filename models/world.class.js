@@ -40,7 +40,7 @@ class World {
       this.checkSlapping();
       this.checkThrowableCollisions(); 
       this.checkSlapCollisions();
-      this.checkSpeedBoost(); // Add this
+      this.checkSpeedBoost();
       this.cleanupDeadFish();
     }, 100);
   }
@@ -341,9 +341,7 @@ class World {
   showGameOverScreen() {
     audioManager.playSound('game_over');
     audioManager.setVolume('game_over', 0.3);
-    // Insert template into DOM
     document.body.insertAdjacentHTML('beforeend', getGameOverTemplate());
-    // Add event listeners
     document.getElementById('retry_button').addEventListener('click', () => {
       document.getElementById('game_over_screen').remove();
       init();
@@ -355,21 +353,13 @@ class World {
   }
 
   showWinScreen() {
-    // Stop the game
-    this.stopGame();
-    
-    // Play victory sound (you could add a victory sound to audioManager)
-    // audioManager.playSound('victory');
-    
-    // Insert template into DOM
+    audioManager.playSound('win');
+    audioManager.setVolume('win', 0.3);
     document.body.insertAdjacentHTML('beforeend', getWinTemplate());
-    
-    // Add event listeners for buttons
     document.getElementById('play_again_button').addEventListener('click', () => {
       document.getElementById('win_screen').remove();
       init();
     });
-    
     document.getElementById('win_menu_button').addEventListener('click', () => {
       document.getElementById('win_screen').remove();
       goBackToStartscreen();

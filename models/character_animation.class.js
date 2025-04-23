@@ -411,7 +411,6 @@ class CharacterAnimation {
   // Custom animation player that doesn't rely on MoveableObject.playAnimation
   playCharacterAnimation(images) {
     if (!isGameActive || !images || !images.length) return;
-    
     let index = this.character.currentImage % images.length;
     let path = images[index];
     this.character.img = this.character.imageCache[path];

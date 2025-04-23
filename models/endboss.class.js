@@ -237,9 +237,11 @@ class Endboss extends MoveableObject {
         this.deathAnimationIndex++;
       }
     }
+
     // After death animation completes, you could trigger game win state
     if (this.deathAnimationIndex >= this.IMAGES_DEAD.length) {
       // Add game victory logic here
+      world.stopGame();
       world.gameWon = true;
       world.showWinScreen();
     }
