@@ -70,11 +70,21 @@ class AudioManager {
 
   toggleMute() {
     this.isMuted = !this.isMuted;
-    if (this.isMuted) {
-      if (this.backgroundMusic) this.backgroundMusic.pause();
-    } else {
-      if (this.backgroundMusic) this.backgroundMusic.play();
+    if (this.backgroundMusic) {
+      if (this.isMuted) {
+        this.backgroundMusic.pause();
+      } else {
+        this.backgroundMusic.play();
+      }
     }
+    for (let sound in this.playingSounds) {
+      if (this.isMuted) {
+        this.playingSounds[sound].pause();
+      } else {
+        this.playingSounds[sound].play();
+      }
+    }
+    
     return this.isMuted;
   }
 }
