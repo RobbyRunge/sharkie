@@ -121,6 +121,8 @@ class Character extends MoveableObject {
 
   collectBottle() {
     if (this.bottles < this.maxBottles) {
+      audioManager.playSound('collect_bottle', false);
+      audioManager.setVolume('collect_bottle', 0.2);
       this.bottles++;
       return true; // Successfully collected
     }
@@ -129,6 +131,8 @@ class Character extends MoveableObject {
 
   collectCoins() {
     if (this.coins < this.maxCoins) {
+      audioManager.playSound('collect_coin', false);
+      audioManager.setVolume('collect_coin', 0.1);
       this.coins++;
       return true;
     }
