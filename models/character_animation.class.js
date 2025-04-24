@@ -212,6 +212,9 @@ class CharacterAnimation {
 
   startSlapping() {
     if (!this.isSlapping) {
+      if (this.isInSleepMode) {
+        audioManager.stopSound('snoring');
+      }
       audioManager.playSound('slap');
       audioManager.setVolume('slap', 0.3);
       this.idleTime = 0;
@@ -263,6 +266,9 @@ class CharacterAnimation {
   startShooting() {
     // Only start shooting if we have bottles and aren't already shooting
     if (this.character.bottles > 0 && !this.isShooting && this.canShoot) {
+      if (this.isInSleepMode) {
+        audioManager.stopSound('snoring');
+      }
       this.isShooting = true;
       this.canShoot = false;
       this.shootingComplete = false;
@@ -333,6 +339,9 @@ class CharacterAnimation {
   }
 
   handleMovementAnimation(now) {
+    if (this.isInSleepMode) {
+      audioManager.stopSound('snoring');
+    }
     // audioManager.playSound('movement');
     // audioManager.setVolume('movement', 0.1);
     // Reset idle time when moving
@@ -364,7 +373,11 @@ class CharacterAnimation {
       this.isInSleepMode = true;
       this.sleepCycleComplete = false;
       this.currentSleepFrame = 0;
-    }
+      setTimeout(() => {
+        audioManager.playSound('snoring');
+        audioManager.setVolume('snoring', 0.05);
+      }, 3200); 
+    }  
   }
 
   playSlowSleepAnimation(now) {

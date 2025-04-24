@@ -18,6 +18,20 @@ class AudioManager {
     }
   }
 
+  stopSound(name) {
+    if (this.sounds[name]) {
+        this.sounds[name].pause();
+        this.sounds[name].currentTime = 0;
+    }
+  }
+
+  stopAllSounds() {
+    for (let sound in this.sounds) {
+        this.sounds[sound].pause();
+        this.sounds[sound].currentTime = 0;
+    }
+  }
+
   playBackgroundMusic(name, loop = true) {
     if (this.backgroundMusic) {
         this.backgroundMusic.pause();
@@ -43,12 +57,5 @@ class AudioManager {
         if (this.backgroundMusic) this.backgroundMusic.play();
     }
     return this.isMuted;
-  }
-
-  stopAllSounds() {
-    for (let sound in this.sounds) {
-        this.sounds[sound].pause();
-        this.sounds[sound].currentTime = 0;
-    }
   }
 }
