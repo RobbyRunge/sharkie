@@ -98,16 +98,10 @@ class World {
   
   checkThrowableCollisions() {
     this.throwableObject.forEach((bottle, index) => {
-      // Check if bottle hits the Endboss
       if (bottle.isColliding(this.level.enemies.find(e => e instanceof Endboss))) {        
-        // Apply damage to Endboss
-        this.level.enemies.find(e => e instanceof Endboss).hit(20);
-        
-        // Remove the bottle
+        this.level.enemies.find(e => e instanceof Endboss).hit('bottle');
         this.throwableObject.splice(index, 1);
       }
-      
-      // Existing collision checks for other enemies...
       this.level.enemies.forEach((enemy) => {
         if (bottle.isColliding(enemy) && enemy instanceof DestructibleEnemy && !enemy.isDying) {
           enemy.die();
@@ -121,13 +115,9 @@ class World {
     if (this.isSlapActive()) {
       const slapX = this.getSlapPosition();
       const endboss = this.level.enemies.find(e => e instanceof Endboss);
-      
       if (endboss && this.isInSlapRange(endboss, slapX)) {
-        // Apply damage to Endboss
-        endboss.hit(20);
+        endboss.hit('slap');
       }
-      
-      // Existing collision checks for other enemies...
       this.level.enemies.forEach((enemy) => {
         this.checkEnemySlapCollision(enemy, slapX);
       });

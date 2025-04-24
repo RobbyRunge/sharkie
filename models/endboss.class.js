@@ -17,6 +17,7 @@ class Endboss extends MoveableObject {
   hitAnimationTimer = 0; // Timer for hit animation
   isDying = false; // Track if dying
   deathAnimationIndex = 0; // Track death animation progress
+  isInvulnerable = false; // Track invulnerability state
 
   IMAGES_SPAWNING = [
     // Spawning animation frames
@@ -108,38 +109,70 @@ class Endboss extends MoveableObject {
     }, 120);
   }
 
-  hit(damage = 20, attackType = 'bottle') {
-    // Skip if already dying
-    if (this.isDying) {
+  hit(attackType = 'bottle') {
+    if (this.isDying || this.isInvulnerable) {
       return;
     }
-    // Apply damage (ensure we don't go below 0)
+    attackType = String(attackType).toLowerCase();
+    const actualDamage = this.calculateDamage(attackType);
+    this.applyDamage(actualDamage);
+    if (this.checkForDeath()) {
+      return;
+    }
+    this.startHitReaction(attackType);
+    console.log(`By ${attackType}! Health: ${this.energy}/100 (Damage: ${actualDamage})`); // Debug info
+  }
+
+  calculateDamage(attackType) {
+    if (attackType === 'slap') {
+      return 10; 
+    } else {
+      return 20; 
+    }
+  }
+
+  applyDamage(damage) {
     this.energy -= damage;
     if (this.energy < 0) this.energy = 0;
-    // Check if this hit killed the boss
+    this.isInvulnerable = true;
+    setTimeout(() => {
+      this.isInvulnerable = false;
+    }, 500);
+  }
+
+  checkForDeath() {
     if (this.energy <= 0) {
       this.die();
-      return;
+      return true;
     }
-    // Start hit animation
+    return false;
+  }
+
+  startHitReaction(attackType) {
     this.isHit = true;
-    this.isAttacking = false; // Interrupt attack if in progress
+    this.isAttacking = false; 
     this.hitAnimationTimer = 0;
-    // Different reactions based on attack type
     if (attackType === 'bottle') {
-      // React to bottle - maybe a stronger push back
-      this.x += 15; // Push back when hit by bottle
-      this.speed = 0; // Slow down after being hit
-      setTimeout(() => {
-        this.speed = 0.8;
-      }, 1000); // Reset position after 1 second
+      this.applyBottleHitEffects();
     } else if (attackType === 'slap') {
-      // React to slap - less push back but more visual effect
-      this.x += 5; // Smaller push back for slap
-      // Add visual effect like flashing red
+      this.applySlapHitEffects();
     }
-    // Debug info
-    console.log(`Endboss hit by ${attackType}! Health: ${this.energy}/100`);
+  }
+
+  applyBottleHitEffects() {
+    this.x += 15; 
+    this.speed = 0; 
+    setTimeout(() => {
+      this.speed = 0.8;
+    }, 1000); 
+  }
+
+  applySlapHitEffects() {
+    this.x += 5; 
+    this.speed = 0; 
+    setTimeout(() => {
+      this.speed = 0.8;
+    }, 1000); 
   }
 
   die() {
@@ -237,17 +270,13 @@ class Endboss extends MoveableObject {
         this.deathAnimationIndex++;
       }
     }
-
-    // After death animation completes, you could trigger game win state
     if (this.deathAnimationIndex >= this.IMAGES_DEAD.length) {
-      // Add game victory logic here
       world.stopGame();
       world.gameWon = true;
       world.showWinScreen();
     }
   }
 
-  // Add visual effect when drawing
   draw(ctx) {
     if (this.visible) {
       super.draw(ctx); // Only draw if visible
