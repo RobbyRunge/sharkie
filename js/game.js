@@ -47,8 +47,7 @@ function loadSounds() {
   audioManager.loadSound('bubble_shoot', 'audio/bubble_shoot_sound.mp3')
   audioManager.loadSound('collect_coin', 'audio/collect_coin.mp3')
   audioManager.loadSound('collect_bottle', 'audio/collect_bottle.mp3')
-  // Start background music with reduced volume for ambience
-
+  audioManager.loadSound('die_enemie', 'audio/die_enemies.mp3')
 }
 
 document.addEventListener('DOMContentLoaded', function() {

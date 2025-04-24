@@ -5,6 +5,8 @@ class DestructibleEnemy extends MoveableObject {
     deathAnimationComplete = false;
     
     die() {
+        audioManager.playSound('die_enemie', false);
+        audioManager.setVolume('die_enemie', 0.2);
         this.isDying = true;
         this.currentDeadFrame = 0;
         this.deathAnimationComplete = false;
