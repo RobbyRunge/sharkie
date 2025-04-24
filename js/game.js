@@ -44,6 +44,7 @@ function loadSounds() {
   audioManager.loadSound('snoring', 'audio/snoring_sound.mp3')
   // audioManager.loadSound('movement', 'audio/underwater-movement-whoosh-4-186901.mp3'); // look again or for a better one
   audioManager.loadSound('slap', 'audio/fin_slap_sound.mp3');
+  audioManager.loadSound('bubble_shoot', 'audio/bubble_shoot_sound.mp3')
   // Start background music with reduced volume for ambience
 
 }

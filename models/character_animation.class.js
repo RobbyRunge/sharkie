@@ -269,6 +269,10 @@ class CharacterAnimation {
       if (this.isInSleepMode) {
         audioManager.stopSound('snoring');
       }
+      setTimeout(() => {
+        audioManager.playSound('bubble_shoot', false);
+        audioManager.setVolume('bubble_shoot', 0.3);
+      }, 760);
       this.isShooting = true;
       this.canShoot = false;
       this.shootingComplete = false;
