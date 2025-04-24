@@ -374,7 +374,7 @@ class CharacterAnimation {
       this.sleepCycleComplete = false;
       this.currentSleepFrame = 0;
       setTimeout(() => {
-        audioManager.playSound('snoring');
+        audioManager.playSound('snoring', false);
         audioManager.setVolume('snoring', 0.05);
       }, 3200); 
     }  

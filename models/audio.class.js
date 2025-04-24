@@ -1,6 +1,7 @@
 class AudioManager {
   constructor() {
     this.sounds = {};
+    this.playingSounds = {};
     this.backgroundMusic = null;
     this.isMuted = false;
   }
@@ -9,52 +10,70 @@ class AudioManager {
     this.sounds[name] = new Audio(path);
   }
 
-  playSound(name) {
+  playSound(name, allowOverlap = true) {
     if (this.isMuted) return;
     if (this.sounds[name]) {
-        // Create a copy to allow overlapping sounds
+      if (allowOverlap) {
         const sound = this.sounds[name].cloneNode();
         sound.play();
+      } else {
+        this.stopSound(name);
+        this.playingSounds[name] = this.sounds[name];
+        this.sounds[name].play();
+      }
     }
   }
 
   stopSound(name) {
     if (this.sounds[name]) {
-        this.sounds[name].pause();
-        this.sounds[name].currentTime = 0;
+      this.sounds[name].pause();
+      this.sounds[name].currentTime = 0;
+    }
+    if (this.playingSounds[name]) {
+      this.playingSounds[name].pause();
+      this.playingSounds[name].currentTime = 0;
+      delete this.playingSounds[name];
     }
   }
 
   stopAllSounds() {
     for (let sound in this.sounds) {
-        this.sounds[sound].pause();
-        this.sounds[sound].currentTime = 0;
+      this.sounds[sound].pause();
+      this.sounds[sound].currentTime = 0;
     }
+    for (let sound in this.playingSounds) {
+      this.playingSounds[sound].pause();
+      this.playingSounds[sound].currentTime = 0;
+    }
+    this.playingSounds = {};
   }
 
   playBackgroundMusic(name, loop = true) {
     if (this.backgroundMusic) {
-        this.backgroundMusic.pause();
+      this.backgroundMusic.pause();
     }
     if (this.sounds[name]) {
-        this.backgroundMusic = this.sounds[name];
-        this.backgroundMusic.loop = loop;
-        this.backgroundMusic.play();
+      this.backgroundMusic = this.sounds[name];
+      this.backgroundMusic.loop = loop;
+      this.backgroundMusic.play();
     }
   }
 
   setVolume(name, volume) {
     if (this.sounds[name]) {
-        this.sounds[name].volume = volume; // 0.0 to 1.0
+      this.sounds[name].volume = volume;
+    }
+    if (this.playingSounds[name]) {
+      this.playingSounds[name].volume = volume;
     }
   }
 
   toggleMute() {
     this.isMuted = !this.isMuted;
     if (this.isMuted) {
-        if (this.backgroundMusic) this.backgroundMusic.pause();
+      if (this.backgroundMusic) this.backgroundMusic.pause();
     } else {
-        if (this.backgroundMusic) this.backgroundMusic.play();
+      if (this.backgroundMusic) this.backgroundMusic.play();
     }
     return this.isMuted;
   }
