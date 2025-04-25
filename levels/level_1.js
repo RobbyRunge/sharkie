@@ -3,21 +3,20 @@ let level_1;
 function initLevel() {
   level_1 = new Level(
   [
-    // Add coins to the level
     new Coin(),
     new Coin(),
     new Coin(),
     new Coin(),
     new Coin(),
     new Coin(),
-    // Add poison bottles to the level
+
     new Posion(),
     new Posion(),
     new Posion(),
     new Posion(),
     new Posion(),
     new Posion(),
-    // Array of enemies (fish and endboss)
+
     // new GreenFish(), 
     // new GreenFish(), 
     // new OrangeFish(),
@@ -35,8 +34,6 @@ function initLevel() {
     new Endboss(),
   ],
   [
-    // Array of background objects creating parallax layers
-    // Multiple layers repeated at different x positions for continuous background
     new BackgroundObject("./img/3.Background/Layers/5. Water/L2.png", -719),
     new BackgroundObject("./img/3.Background/Layers/4.Fondo 2/L2.png", -719),
     new BackgroundObject("./img/3.Background/Layers/3.Fondo 1/D2.png", -719),

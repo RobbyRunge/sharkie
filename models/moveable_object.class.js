@@ -1,8 +1,6 @@
 class MoveableObject extends DrawableObject {
-  // Base class for all movable game entities
-  speed = 0.15; // Default movement speed
-  otherDirection = false; // Direction flag for flipping images
-  // Replace symmetric offsets with directional offsets
+  speed = 0.15; 
+  otherDirection = false;
   offsetX = 0;
   offsetY = 0;
   offsetTop = 0;
@@ -11,7 +9,6 @@ class MoveableObject extends DrawableObject {
   offsetRight = 0;
   energy = 100;
 
-  // Detects collision between two moveable objects using their offset boundaries
   isColliding(moveableObject) {
     const leftOffset = this.offsetLeft || this.offsetX;
     const rightOffset = this.offsetRight || this.offsetX;
@@ -44,9 +41,7 @@ class MoveableObject extends DrawableObject {
   }
 
   playAnimation(images) {
-    // Only animate if game is active and images array exists
     if (!isGameActive || !images || !Array.isArray(images)) return;    
-    // Play any animation sequence
     let index = this.currentImage % images.length; 
     let path = images[index];
     this.img = this.imageCache[path];

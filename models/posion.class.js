@@ -14,18 +14,14 @@ class Posion extends MoveableObject {
     super();
     this.loadImage(this.IMAGES_POSION[0]);
     this.loadImages(this.IMAGES_POSION);
-    // Position at a random location in the game world
-    this.x = 300 + Math.random() * 2000; // Random x position
-    this.y = 50 + Math.random() * 300;   // Random y position
-    // Size appropriate for collectible
+    this.x = 300 + Math.random() * 2000;
+    this.y = 50 + Math.random() * 300;   
     this.width = 60;
     this.height = 70;
-    // Set collision boundaries
     this.offsetTop = 10;
     this.offsetBottom = 10;
     this.offsetLeft = 10;
     this.offsetRight = 10;
-    // Ensure this is set to make collision detection work properly
     this.isCollectible = true;
     this.animate();
   }

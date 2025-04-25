@@ -1,5 +1,4 @@
 class DestructibleEnemy extends MoveableObject {
-    // Common properties and methods for destructible enemies
     isDying = false;
     currentDeadFrame = 0;
     deathAnimationComplete = false;

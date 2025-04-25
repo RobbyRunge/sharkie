@@ -20,7 +20,6 @@ class PosionBar extends DrawableObject {
     this.setPercentage(0);
   }
 
-  // stePercentage(50);
   setPercentage(percentage) {
     this.percentage = percentage;
     let path = this.IMAGES_POISON[this.resolveImageIndex()];
@@ -28,7 +27,6 @@ class PosionBar extends DrawableObject {
   }  
     
   resolveImageIndex() {
-    console.log(this.percentage);
     if (this.percentage >= 100) {
       return 5;
     } else if (this.percentage >= 80) {

@@ -1,26 +1,24 @@
 class World {
-  // Game world that manages all objects and rendering
-  character = new Character(); // Player character
-  level = level_1; // Current level
-  canvas; // Game canvas
-  ctx; // Canvas 2D context
-  keyboard; // Keyboard input reference
-  camera_x = 0; // Camera horizontal position
+  character = new Character(); 
+  level = level_1; 
+  canvas; 
+  ctx; 
+  keyboard; 
+  camera_x = 0; 
   statusBar =  new StatusBar();
   coinBar = new CoinBar();
   posionBar = new PosionBar();
   throwableObject = [];
 
   constructor(canvas, keyboard) {
-    // Initialize world with canvas and input
     this.ctx = canvas.getContext("2d");
     this.canvas = canvas;
     this.keyboard = keyboard;
     this.draw();
     this.setWorld();
     this.run();
-    this.updatePoisonBar(); // Initialize poison bar
-    this.updateCoinBar(); // Initialize coin bar
+    this.updatePoisonBar();
+    this.updateCoinBar(); 
 
     // Slap attack parameters
     this.SLAP_RANGE = 30; // Horizontal reach of slap attack
@@ -29,7 +27,6 @@ class World {
   }
 
   setWorld() {
-    // Connect character to world for access to world properties
     this.character.world = this;
   }
 
@@ -57,9 +54,7 @@ class World {
   }
   
   checkStartShooting() {
-    // Start shooting animation when D is pressed
     if (this.keyboard.D && this.character.startShooting()) {
-      // The animation is started, but no projectile yet
     }
   }
   
@@ -184,12 +179,11 @@ class World {
   }
   
   handleEnemyCollision(enemy) {
-    // Determine hit type and damage based on enemy
     let hitType = 'poison'; 
-    let damage = 5; // Default damage
+    let damage = 5; 
     if (enemy instanceof GreenJellyFish || enemy instanceof PinkJellyFish) {
       hitType = 'electric';
-      damage = 15; // Higher damage for electric jellyfish
+      damage = 15; 
     }
     this.character.hit(hitType, damage);
     this.statusBar.setPercentage(this.character.energy);
@@ -203,23 +197,17 @@ class World {
   }
 
   updatePoisonBar() {
-    // Calculate percentage based on current bottles (0-10 maps to 0-100%)
     let percentage = (this.character.bottles / this.character.maxBottles) * 100;
     this.posionBar.setPercentage(percentage);
   }
 
   updateCoinBar() {
-    // Calculate percentage based on current coins (now 0-10 maps to 0-100%) CHANGE?? What happen with a full coinbar
     let percentage = (this.character.coins / this.character.maxCoins) * 100;
     this.coinBar.setPercentage(percentage);
   }
 
   draw() {
-    // Only continue drawing if game is active
     if (!isGameActive) return;
-    
-    // Main render loop - clear canvas, apply camera transform, draw objects
-    // Uses requestAnimationFrame for smooth animation
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
     this.ctx.translate(this.camera_x, 0);
     this.addObjectsToMap(this.level.backgroundObject);
@@ -229,14 +217,12 @@ class World {
     this.addToMap(this.character);
 
     this.ctx.translate(-this.camera_x, 0);
-    // ---- Space for fixed objects ----
     this.addToMap(this.statusBar);
     this.addToMap(this.coinBar);
     this.addToMap(this.posionBar);
     this.ctx.translate(this.camera_x, 0);
 
     this.ctx.translate(-this.camera_x, 0);
-    // Draw() wird immer wieder aufgerufen
     let self = this;
     if (isGameActive) {
       requestAnimationFrame(function() {
@@ -246,7 +232,6 @@ class World {
   }
 
   addObjectsToMap(objects) {
-    // Draw multiple objects to canvas
     objects.forEach(o => {
       this.addToMap(o);
     });
@@ -356,11 +341,9 @@ class World {
     });
   }
 
-  // Add this new method
   checkSpeedBoost() {
     if (this.keyboard.E) {
       this.character.multiplySpeedByCollectCoins();
-      // Reset immediately to prevent multiple activations from one press
       this.keyboard.E = false;
     }
   }

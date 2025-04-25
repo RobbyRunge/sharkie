@@ -1,20 +1,18 @@
 class DrawableObject {
-  img; // Image object
-  imageCache = {}; // Storage for preloaded images
-  currentImage = 0; // Current animation frame
-  x = 120; // Default horizontal position
-  y = 200; // Default vertical position
-  height = 100; // Default height
-  width = 100; // Default width
+  img; 
+  imageCache = {}; 
+  currentImage = 0; 
+  x = 120; 
+  y = 200; 
+  height = 100; 
+  width = 100; 
 
   loadImage(path) {
-    // Load a single image
     this.img = new Image();
     this.img.src = path;
   }
   
   loadImages(array) {
-    // Preload multiple images for animations
     array.forEach((path) => {
       let img = new Image();
       img.src = path;

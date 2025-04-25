@@ -1,18 +1,17 @@
 class Character extends MoveableObject {
-  // Player character with controls and animations
   width = 200;
   x = 0;
   height = 200;
   y = 100;
   world;
-  speed = 1; // reset to 1 when your are finished with the game
-  rotation = 0; // Track current rotation angle in degrees
-  bottles = 0; // Track collected poison bottles
-  maxBottles = 5; // Maximum number of bottles to collect
+  speed = 1; 
+  rotation = 0; 
+  bottles = 0;
+  maxBottles = 5;
   coins = 0;
   maxCoins = 5;
-  animation; // Instance of CharacterAnimation
-  speedBoostActive = false; // Track if speed boost is active
+  animation; 
+  speedBoostActive = false; 
 
   constructor() {
     super();
@@ -56,7 +55,7 @@ class Character extends MoveableObject {
   }
 
   handleHorizontalMovement() {
-    if (this.isDead()) return; // Don't allow movement when dead
+    if (this.isDead()) return; 
     if (this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x) {
       this.moveRight();
     }
@@ -67,20 +66,20 @@ class Character extends MoveableObject {
 
   moveRight() {
     this.x += this.speed;
-    if (!this.isDead()) { // Only change direction if not dead
+    if (!this.isDead()) { 
       this.otherDirection = false;
     }
   }
 
   moveLeft() {
     this.x -= this.speed;
-    if (!this.isDead()) { // Only change direction if not dead
+    if (!this.isDead()) { 
       this.otherDirection = true;
     }
   }
 
   handleVerticalMovement() {
-    if (this.isDead()) return; // Don't allow movement when dead
+    if (this.isDead()) return; 
     if (this.world.keyboard.UP && this.y > -90) {
       this.moveUp();
     }
@@ -124,9 +123,9 @@ class Character extends MoveableObject {
       audioManager.playSound('collect_bottle', false);
       audioManager.setVolume('collect_bottle', 0.2);
       this.bottles++;
-      return true; // Successfully collected
+      return true; 
     }
-    return false; // Already at maximum
+    return false; 
   }
 
   collectCoins() {
@@ -179,16 +178,16 @@ class Character extends MoveableObject {
   }
   
   higherAnimationSpeed() {
-    this.animation.animationSpeed.swimming = 50;  // Was 100
-    this.animation.animationSpeed.slapping = 15; // Was 70
+    this.animation.animationSpeed.swimming = 50;  
+    this.animation.animationSpeed.slapping = 15; 
   }
   
   useBottle() {
     if (this.bottles > 0) {
       this.bottles--;
-      return true; // Successfully used a bottle
+      return true; 
     }
-    return false; // No bottles available
+    return false; 
   }
 
   playAnimation(images) {

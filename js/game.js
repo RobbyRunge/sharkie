@@ -1,9 +1,9 @@
-let canvas; // Main canvas element
-let world; // Game world object
-let keyboard = new Keyboard(); // Input handler
-let intervalIds = []; // Array to store all interval IDs
-let isGameActive = true; // New flag to track if game is active
-let audioManager; // Audio manager instance
+let canvas; 
+let world; 
+let keyboard = new Keyboard();
+let intervalIds = []; 
+let isGameActive = true; 
+let audioManager; 
 
 function checkOrientation() {
   let rotationMessage = document.getElementById('rotation_message');
@@ -14,7 +14,6 @@ function checkOrientation() {
   }
 }
 
-// Check orientation on page load and when resizing
 window.addEventListener('load', checkOrientation);
 window.addEventListener('resize', checkOrientation);
 window.addEventListener('orientationchange', checkOrientation);
@@ -26,8 +25,8 @@ function setStoppableInterval(fn, time) {
 }
 
 function init() {
-  intervalIds = []; // Reset intervals array
-  isGameActive = true; // Reset game state
+  intervalIds = []; 
+  isGameActive = true;
   audioManager = new AudioManager();
   loadSounds();
   initLevel();
@@ -104,7 +103,6 @@ function closeFullscreen() {
   }
 }
 
-// Event listeners for keydown events - set corresponding keyboard properties to true
 window.addEventListener('keydown', (event => {  
   switch(event.code) {
     case 'ArrowLeft':
@@ -131,7 +129,6 @@ window.addEventListener('keydown', (event => {
   }
 }));
 
-// Event listeners for keyup events - set corresponding keyboard properties to false
 window.addEventListener('keyup', (event => {
   switch(event.code) {
     case 'ArrowLeft':

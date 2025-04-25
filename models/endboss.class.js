@@ -1,26 +1,22 @@
 class Endboss extends MoveableObject {
-  // Final boss enemy
   height = 500;
   y = -70;
   width = 350;
-  speed = 0.8; // Speed of the endboss
-  hadFirstContact = false; // Flag to check if the endboss has made first contact with the character
-  visible = false; // Add this flag to track visibility
-  isAttacking = false; // Add this property to track attack state
-  lastAttackTime = 0; // Track when the last attack finished
-  attackCooldown = 2000; // 2 seconds cooldown
-  currentAttackFrame = 0; // Track which frame of attack animation is playing
-  
-  // Add properties for hit system
-  energy = 100; // Health - 5 hits of 20 damage each to kill
-  isHit = false; // Track if currently in hit animation
-  hitAnimationTimer = 0; // Timer for hit animation
-  isDying = false; // Track if dying
-  deathAnimationIndex = 0; // Track death animation progress
-  isInvulnerable = false; // Track invulnerability state
+  speed = 0.8; 
+  hadFirstContact = false;
+  visible = false; 
+  isAttacking = false;
+  lastAttackTime = 0; 
+  attackCooldown = 2000; 
+  currentAttackFrame = 0; 
+  energy = 100; 
+  isHit = false; 
+  hitAnimationTimer = 0; 
+  isDying = false; 
+  deathAnimationIndex = 0; 
+  isInvulnerable = false; 
 
   IMAGES_SPAWNING = [
-    // Spawning animation frames
     'img/2.Enemy/3.Final_Enemy/1.Introduce/1.png',
     'img/2.Enemy/3.Final_Enemy/1.Introduce/2.png',
     'img/2.Enemy/3.Final_Enemy/1.Introduce/3.png',
@@ -34,7 +30,6 @@ class Endboss extends MoveableObject {
   ];
 
   IMAGES_STAND = [
-    // Floating animation frames
     './img/2.Enemy/3.Final_Enemy/2.floating/1.png',
     './img/2.Enemy/3.Final_Enemy/2.floating/2.png',
     './img/2.Enemy/3.Final_Enemy/2.floating/3.png',
@@ -51,7 +46,6 @@ class Endboss extends MoveableObject {
   ];
 
   IMAGES_ATTACK = [
-    // Attack animation frames
     './img/2.Enemy/3.Final_Enemy/Attack/1.png',
     './img/2.Enemy/3.Final_Enemy/Attack/2.png',
     './img/2.Enemy/3.Final_Enemy/Attack/3.png',
@@ -61,7 +55,6 @@ class Endboss extends MoveableObject {
   ];
 
   IMAGES_HIT = [
-    // Hit animation frames
     './img/2.Enemy/3.Final_Enemy/Hurt/1.png',
     './img/2.Enemy/3.Final_Enemy/Hurt/2.png',
     './img/2.Enemy/3.Final_Enemy/Hurt/3.png',
@@ -69,7 +62,6 @@ class Endboss extends MoveableObject {
   ];
 
   IMAGES_DEAD = [
-    // Dead animation frames
     './img/2.Enemy/3.Final_Enemy/Dead/Mesa de trabajo 2 copia 6.png',
     './img/2.Enemy/3.Final_Enemy/Dead/Mesa de trabajo 2 copia 7.png',
     './img/2.Enemy/3.Final_Enemy/Dead/Mesa de trabajo 2 copia 8.png',
@@ -79,13 +71,12 @@ class Endboss extends MoveableObject {
   ];
 
   constructor() {
-    // Initialize position and animations
-    super().loadImage('img/2.Enemy/3.Final_Enemy/1.Introduce/1.png'); // Load first image but don't show yet
+    super().loadImage('img/2.Enemy/3.Final_Enemy/1.Introduce/1.png');
     this.loadImages(this.IMAGES_STAND);
     this.loadImages(this.IMAGES_SPAWNING);
     this.loadImages(this.IMAGES_ATTACK);
     this.loadImages(this.IMAGES_HIT);
-    this.loadImages(this.IMAGES_DEAD); // Load death animation images
+    this.loadImages(this.IMAGES_DEAD);
     this.x = 2400;
     this.offsetTop = 125;
     this.offsetBottom = 70;
@@ -103,7 +94,7 @@ class Endboss extends MoveableObject {
       if (this.visible) {
         this.playAnimations();
         if (!this.isDying && !this.isHit) {
-          this.checkAttackRange(); // Only check attack range when not hit or dying
+          this.checkAttackRange();
         }
       }
     }, 120);
@@ -120,7 +111,6 @@ class Endboss extends MoveableObject {
       return;
     }
     this.startHitReaction(attackType);
-    console.log(`By ${attackType}! Health: ${this.energy}/100 (Damage: ${actualDamage})`); // Debug info
   }
 
   calculateDamage(attackType) {
@@ -180,11 +170,10 @@ class Endboss extends MoveableObject {
   }
 
   die() {
-    console.log('Endboss dying!');
     this.isDying = true;
     this.isHit = false;
     this.isAttacking = false;
-    this.speed = 0; // Stop movement
+    this.speed = 0; 
     this.deathAnimationIndex = 0;
   }
 
@@ -192,11 +181,9 @@ class Endboss extends MoveableObject {
     const currentTime = new Date().getTime();
     const cooldownElapsed = currentTime - this.lastAttackTime > this.attackCooldown;
     const inAttackRange = world.character.x < this.x + 350 && world.character.x > this.x - 350;
-    // Start attack if in range and cooldown has elapsed
     if (inAttackRange && !this.isAttacking && cooldownElapsed) {
       this.startAttackAnimation();
     }
-    // End attack if out of range (even during attack)
     else if (!inAttackRange && this.isAttacking) {
       this.endAttackAnimation();
     }
@@ -204,7 +191,7 @@ class Endboss extends MoveableObject {
 
   startAttackAnimation() {
     this.isAttacking = true;
-    this.currentAttackFrame = 0; // Reset attack animation frame
+    this.currentAttackFrame = 0;
   }
 
   endAttackAnimation() {
@@ -213,10 +200,10 @@ class Endboss extends MoveableObject {
 
   checkFirstContact() {
     if (world.character.x > 2000 && !this.hadFirstContact) {
-      this.visible = true; // Make boss visible
-      this.hadFirstContact = true; // Set the flag to true after first contact
-      this.animationStarted = true; // Start animation sequence
-      this.animationFrame = 0; // Ensure we start from the beginning of the spawning animation
+      this.visible = true;
+      this.hadFirstContact = true;
+      this.animationStarted = true;
+      this.animationFrame = 0;
       this.startMovementEndboss();
     }
   }
@@ -235,12 +222,9 @@ class Endboss extends MoveableObject {
     } else if (this.isHit) {
       this.playHitAnimation();
     } else if (this.animationStarted && this.animationFrame < 10) {
-      // Play spawning animation first
       this.playAnimation(this.IMAGES_SPAWNING);
     } else if (this.isAttacking) {
-      // Play attack animation
       this.playAnimation(this.IMAGES_ATTACK);
-      // Track attack frame and handle attack completion
       this.currentAttackFrame++;
       if (this.currentAttackFrame >= this.IMAGES_ATTACK.length) {
         this.lastAttackTime = new Date().getTime();
@@ -248,17 +232,14 @@ class Endboss extends MoveableObject {
         this.currentAttackFrame = 0;
       }
     } else {
-      // Switch to standing animation
       this.playAnimation(this.IMAGES_STAND);
     }
     if (this.animationStarted) this.animationFrame++;
   }
 
   playHitAnimation() {
-    // Play through hit images
     let index = Math.min(Math.floor(this.hitAnimationTimer / 2), this.IMAGES_HIT.length - 1);
     this.img = this.imageCache[this.IMAGES_HIT[index]];
-    // Increment timer and check if animation is complete
     this.hitAnimationTimer++;
     if (this.hitAnimationTimer >= this.IMAGES_HIT.length * 2) {
       this.isHit = false;
@@ -269,7 +250,6 @@ class Endboss extends MoveableObject {
   playDeathAnimation() {
     if (this.deathAnimationIndex < this.IMAGES_DEAD.length) {
       this.img = this.imageCache[this.IMAGES_DEAD[this.deathAnimationIndex]];
-      // Slow down death animation by changing frame every 3 cycles
       if (this.animationFrame % 3 === 0) {
         this.deathAnimationIndex++;
       }
@@ -284,7 +264,7 @@ class Endboss extends MoveableObject {
 
   draw(ctx) {
     if (this.visible) {
-      super.draw(ctx); // Only draw if visible
+      super.draw(ctx);
     }
   }
 }

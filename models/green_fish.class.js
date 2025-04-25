@@ -1,12 +1,10 @@
 class GreenFish extends DestructibleEnemy {
-  // Enemy fish with swimming animation
   width = 60;
   x = 0;
   height = 60;
   y = 200;
   
   IMAGES_SWIMMING = [
-    // Swimming animation frames
     './img/2.Enemy/1.Puffer_fish(3_color_options)/1.Swim/1.swim1.png',
     './img/2.Enemy/1.Puffer_fish(3_color_options)/1.Swim/1.swim2.png',
     './img/2.Enemy/1.Puffer_fish(3_color_options)/1.Swim/1.swim3.png',
@@ -18,20 +16,17 @@ class GreenFish extends DestructibleEnemy {
   ];
 
   IMAGES_DEAD = [
-    // Dead animation frames
     'img/2.Enemy/1.Puffer_fish(3_color_options)/4.DIE/dead_fish_1.png',
     'img/2.Enemy/1.Puffer_fish(3_color_options)/4.DIE/dead_fish_1_2.png',
     'img/2.Enemy/1.Puffer_fish(3_color_options)/4.DIE/dead_fish_1_3.png',
   ];
 
   constructor() {
-    // Initialize with random position and speed
     super();
     this.loadImage(this.IMAGES_SWIMMING[0]);
     this.x = 200 + Math.random() * 2500;
     this.y = 0 + Math.random() * 410;
     this.speed = 0.15 + Math.random() * 0.5;
-    // Use specific directional offsets
     this.offsetLeft = 4;
     this.offsetRight = 6;
     this.offsetTop = 0;

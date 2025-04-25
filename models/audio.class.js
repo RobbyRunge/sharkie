@@ -84,7 +84,6 @@ class AudioManager {
         this.playingSounds[sound].play();
       }
     }
-    
     return this.isMuted;
   }
 }

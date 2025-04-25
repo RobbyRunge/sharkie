@@ -1,13 +1,12 @@
 class CharacterAnimation {
-  // Animation state tracking
   idleTime = 0;
   isInSleepMode = false;
   sleepCycleComplete = false;
   currentSleepFrame = 0;
   isHit = false;
   hitTime = 0;
-  hitDuration = 300; // Changed from 100 to 300 to allow sound to play longer
-  hitType = 'poison'; // Default hit type
+  hitDuration = 300;
+  hitType = 'poison'; 
   isSlapping = false;
   currentSlapFrame = 0;
   slapComplete = false;
@@ -36,10 +35,8 @@ class CharacterAnimation {
     slapping: 0,
     shooting: 0
   };
+  character;
 
-  character; // Reference to the character that owns this animation
-
-  // Animation image arrays
   IMAGES_STAND = [
     './img/1.Sharkie/1.IDLE/1.png',
     './img/1.Sharkie/1.IDLE/2.png',
@@ -271,7 +268,6 @@ class CharacterAnimation {
   }
 
   startShooting() {
-    // Only start shooting if we have bottles and aren't already shooting
     if (this.character.bottles > 0 && !this.isShooting && this.canShoot) {
       if (this.isInSleepMode) {
         audioManager.stopSound('snoring');
@@ -285,7 +281,7 @@ class CharacterAnimation {
       this.shootingComplete = false;
       this.shootingProcessed = false;
       this.shootingTime = 0;
-      this.currentShootingFrame = 0; // Reset frame index when starting new shot
+      this.currentShootingFrame = 0;
       return true;
     }
     return false;
@@ -312,7 +308,7 @@ class CharacterAnimation {
   advanceShootingFrame() {
     if (this.currentShootingFrame < this.IMAGES_SHOOTING.length) {
       this.character.img = this.character.imageCache[this.IMAGES_SHOOTING[this.currentShootingFrame]];
-      this.currentShootingFrame++; // Move to next frame
+      this.currentShootingFrame++;
     }
   }
   
@@ -331,10 +327,8 @@ class CharacterAnimation {
       this.resetShootingState();
     }
   }
-  
-  // Helper method to reset all shooting-related state
+
   resetShootingState() {
-    // Reset idle time when moving
     this.idleTime = 0;
     this.isInSleepMode = false;
     this.sleepCycleComplete = false;
@@ -343,7 +337,7 @@ class CharacterAnimation {
     this.shootingTime = 0;
     this.shootingComplete = false;
     this.shootingProcessed = false;
-    this.currentShootingFrame = 0; // Reset frame index
+    this.currentShootingFrame = 0;
     setTimeout(() => {
       this.canShoot = true;
     }, 200);
@@ -355,12 +349,10 @@ class CharacterAnimation {
     }
     // audioManager.playSound('movement');
     // audioManager.setVolume('movement', 0.1);
-    // Reset idle time when moving
     this.idleTime = 0;
     this.isInSleepMode = false;
     this.sleepCycleComplete = false;
     this.currentSleepFrame = 0;
-    // Update swimming animation at swimming speed
     if (now - this.lastAnimationUpdate.swimming >= this.animationSpeed.swimming) {
       this.playCharacterAnimation(this.IMAGES_SWIMMING);
       this.lastAnimationUpdate.swimming = now;
@@ -368,7 +360,6 @@ class CharacterAnimation {
   }
 
   handleIdleAnimation(now) {
-    // Character is idle
     this.updateIdleState();
     if (this.isInSleepMode) {
       this.playSlowSleepAnimation(now);
@@ -378,9 +369,8 @@ class CharacterAnimation {
   }
 
   updateIdleState() {
-    this.idleTime += 100; // Add 100ms to idle time
+    this.idleTime += 100;
     if (this.idleTime > 5000 && !this.isInSleepMode) {
-      // After 5 seconds of idle time, start sleep animation
       this.isInSleepMode = true;
       this.sleepCycleComplete = false;
       this.currentSleepFrame = 0;
@@ -392,7 +382,6 @@ class CharacterAnimation {
   }
 
   playSlowSleepAnimation(now) {
-    // Only update animation when enough time has passed
     if (now - this.lastAnimationUpdate.sleeping >= this.animationSpeed.sleeping) {
       this.lastAnimationUpdate.sleeping = now;
       if (!this.sleepCycleComplete) {
@@ -404,35 +393,29 @@ class CharacterAnimation {
   }
   
   playInitialSleepAnimation() {
-    // First cycle: Play full animation
     this.character.img = this.character.imageCache[this.IMAGES_SLEEP[this.currentSleepFrame]];
     this.currentSleepFrame++;
-    // Check if first cycle is complete
     if (this.currentSleepFrame >= this.IMAGES_SLEEP.length) {
       this.sleepCycleComplete = true;
-      this.currentSleepFrame = 10; // Index for frame 11
+      this.currentSleepFrame = 10;
     }
   }
   
   playLoopingSleepAnimation() {
-    // After first cycle: Only play frames 11-14
     this.character.img = this.character.imageCache[this.IMAGES_SLEEP[this.currentSleepFrame]];
     this.currentSleepFrame++; 
-    // Loop between frames 10-14 (indices 10-13)
     if (this.currentSleepFrame > 13) {
       this.currentSleepFrame = 10;
     }
   }
 
   playStandingAnimation(now) {
-    // Update standing animation at standing speed
     if (now - this.lastAnimationUpdate.standing >= this.animationSpeed.standing) {
       this.playCharacterAnimation(this.IMAGES_STAND);
       this.lastAnimationUpdate.standing = now;
     }
   }
 
-  // Custom animation player that doesn't rely on MoveableObject.playAnimation
   playCharacterAnimation(images) {
     if (!isGameActive || !images || !images.length) return;
     let index = this.character.currentImage % images.length;
@@ -441,12 +424,11 @@ class CharacterAnimation {
     this.character.currentImage++;
   }
 
-  // Trigger hit animation and state
   triggerHit(hitType = 'poison') {
     if (!this.character.isDead() && !this.isHit) {
       this.isHit = true;
       this.hitTime = 0;
-      this.hitType = hitType; // Set the hit type
+      this.hitType = hitType; 
       return true;
     }
     return false;
