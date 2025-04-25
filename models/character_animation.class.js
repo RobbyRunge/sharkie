@@ -108,7 +108,7 @@ class CharacterAnimation {
   currentSleepFrame = 0;
   isHit = false;
   hitTime = 0;
-  hitDuration = 100;
+  hitDuration = 300; // Changed from 100 to 300 to allow sound to play longer
   hitType = 'poison'; // Default hit type
   isSlapping = false;
   currentSlapFrame = 0;
@@ -195,8 +195,9 @@ class CharacterAnimation {
 
   handleHitAnimation(now) {
     if (now - this.lastAnimationUpdate.hit >= this.animationSpeed.hit) {
-      // Choose animation based on hit type
-      if (this.hitType === 'electric') {
+      if (this.hitType === 'electric' && this.isHit) {
+        audioManager.playSound('electric_shock', false);
+        audioManager.setVolume('electric_shock', 0.3);
         this.playCharacterAnimation(this.IMAGES_HIT_ELECTRIC);
       } else {
         this.playCharacterAnimation(this.IMAGES_HIT);
@@ -204,6 +205,9 @@ class CharacterAnimation {
       this.lastAnimationUpdate.hit = now;
       this.hitTime += 100;
       if (this.hitTime >= this.hitDuration) {
+        if (this.hitType === 'electric') {
+          audioManager.stopSound('electric_shock');
+        }
         this.isHit = false;
         this.hitTime = 0;
       }
