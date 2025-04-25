@@ -1,4 +1,44 @@
 class CharacterAnimation {
+  // Animation state tracking
+  idleTime = 0;
+  isInSleepMode = false;
+  sleepCycleComplete = false;
+  currentSleepFrame = 0;
+  isHit = false;
+  hitTime = 0;
+  hitDuration = 300; // Changed from 100 to 300 to allow sound to play longer
+  hitType = 'poison'; // Default hit type
+  isSlapping = false;
+  currentSlapFrame = 0;
+  slapComplete = false;
+  isShooting = false;
+  currentShootingFrame = 0;
+  shootingTime = 0;
+  shootingDuration = 350;
+  shootingComplete = false;
+  canShoot = true;
+  shootingProcessed = false;
+  currentDeadFrame = 0;
+  deathAnimationComplete = false;
+  animationSpeed = {
+    swimming: 100,
+    standing: 150,
+    sleeping: 300,
+    hit: 100,
+    slapping: 70,
+    shooting: 50
+  };
+  lastAnimationUpdate = {
+    swimming: 0,
+    standing: 0,
+    sleeping: 0,
+    hit: 0,
+    slapping: 0,
+    shooting: 0
+  };
+
+  character; // Reference to the character that owns this animation
+
   // Animation image arrays
   IMAGES_STAND = [
     './img/1.Sharkie/1.IDLE/1.png',
@@ -100,46 +140,6 @@ class CharacterAnimation {
     './img/1.Sharkie/6.dead/1.Poisoned/11.png',
     './img/1.Sharkie/6.dead/1.Poisoned/12.png',
   ];
-
-  // Animation state tracking
-  idleTime = 0;
-  isInSleepMode = false;
-  sleepCycleComplete = false;
-  currentSleepFrame = 0;
-  isHit = false;
-  hitTime = 0;
-  hitDuration = 300; // Changed from 100 to 300 to allow sound to play longer
-  hitType = 'poison'; // Default hit type
-  isSlapping = false;
-  currentSlapFrame = 0;
-  slapComplete = false;
-  isShooting = false;
-  currentShootingFrame = 0;
-  shootingTime = 0;
-  shootingDuration = 350;
-  shootingComplete = false;
-  canShoot = true;
-  shootingProcessed = false;
-  currentDeadFrame = 0;
-  deathAnimationComplete = false;
-  animationSpeed = {
-    swimming: 100,
-    standing: 150,
-    sleeping: 300,
-    hit: 100,
-    slapping: 70,
-    shooting: 50
-  };
-  lastAnimationUpdate = {
-    swimming: 0,
-    standing: 0,
-    sleeping: 0,
-    hit: 0,
-    slapping: 0,
-    shooting: 0
-  };
-
-  character; // Reference to the character that owns this animation
 
   constructor(character) {
     this.character = character;
