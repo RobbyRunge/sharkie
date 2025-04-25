@@ -87,34 +87,34 @@
     <div class="control_container d_none">
       <div class="img_movement">
         <button class="control_button_design" 
-          onmousedown="keyboard.LEFT = true" 
-          onmouseup="keyboard.LEFT = false" 
-          onmouseleave="keyboard.LEFT = false"
-          ontouchstart="keyboard.LEFT = true" 
-          ontouchend="keyboard.LEFT = false">&#11164;</button>
+          onmousedown="handleButtonDown(event, 'LEFT')" 
+          onmouseup="handleButtonUp('LEFT')" 
+          onmouseleave="handleButtonUp('LEFT')"
+          ontouchstart="handleButtonDown(event, 'LEFT')" 
+          ontouchend="handleButtonUp('LEFT')">&larr;</button>
         
         <div class="keys_column">        
           <button class="control_button_design position_icon" 
-            onmousedown="keyboard.UP = true" 
-            onmouseup="keyboard.UP = false" 
-            onmouseleave="keyboard.UP = false"
-            ontouchstart="keyboard.UP = true" 
-            ontouchend="keyboard.UP = false">&#11165;</button>
+            onmousedown="handleButtonDown(event, 'UP')" 
+            onmouseup="handleButtonUp('UP')" 
+            onmouseleave="handleButtonUp('UP')"
+            ontouchstart="handleButtonDown(event, 'UP')" 
+            ontouchend="handleButtonUp('UP')">&uarr;</button>
             
           <button class="control_button_design position_icon" 
-            onmousedown="keyboard.DOWN = true" 
-            onmouseup="keyboard.DOWN = false" 
-            onmouseleave="keyboard.DOWN = false"
-            ontouchstart="keyboard.DOWN = true" 
-            ontouchend="keyboard.DOWN = false">&#11167;</button>
+            onmousedown="handleButtonDown(event, 'DOWN')" 
+            onmouseup="handleButtonUp('DOWN')" 
+            onmouseleave="handleButtonUp('DOWN')"
+            ontouchstart="handleButtonDown(event, 'DOWN')" 
+            ontouchend="handleButtonUp('DOWN')">&darr;</button>
         </div>
         
         <button class="control_button_design position_icon" 
-          onmousedown="keyboard.RIGHT = true" 
-          onmouseup="keyboard.RIGHT = false" 
-          onmouseleave="keyboard.RIGHT = false"
-          ontouchstart="keyboard.RIGHT = true" 
-          ontouchend="keyboard.RIGHT = false">&#11166;</button>
+          onmousedown="handleButtonDown(event, 'RIGHT')" 
+          onmouseup="handleButtonUp('RIGHT')" 
+          onmouseleave="handleButtonUp('RIGHT')"
+          ontouchstart="handleButtonDown(event, 'RIGHT')" 
+          ontouchend="handleButtonUp('RIGHT')">&rarr;</button>
       </div>
 
       <div class="img_positiom_control_container">
