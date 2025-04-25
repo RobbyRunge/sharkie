@@ -359,7 +359,7 @@ ul {
 }
 
 .img_size_control:active {
-  transform: scale(0.9);
+  transform: scale(1.1);
   background-color: rgba(100, 200, 255, 0.9);
 }
 
@@ -432,7 +432,7 @@ ul {
   .arrow_right {
     transform: rotate(90deg);
   }
-  
+
   .arrow_down {
     transform: rotate(180deg);
   }
