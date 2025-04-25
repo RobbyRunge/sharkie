@@ -275,6 +275,7 @@ class Endboss extends MoveableObject {
       }
     }
     if (this.deathAnimationIndex >= this.IMAGES_DEAD.length) {
+      closeFullscreen(); 
       world.stopGame();
       world.gameWon = true;
       world.showWinScreen();

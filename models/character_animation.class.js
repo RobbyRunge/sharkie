@@ -187,6 +187,7 @@ class CharacterAnimation {
       this.character.img = this.character.imageCache[this.IMAGES_DEAD[this.currentDeadFrame]];
       this.currentDeadFrame++;
     } else if (!this.deathAnimationComplete) {
+      closeFullscreen();
       this.deathAnimationComplete = true;
       this.character.world.stopGame();
       this.character.world.showGameOverScreen();
