@@ -104,15 +104,6 @@ function closeFullscreen() {
   }
 }
 
-function handleButtonDown(event, direction) {
-  event.preventDefault();
-  keyboard[direction] = true;
-}
-
-function handleButtonUp(direction) {
-  keyboard[direction] = false;
-}
-
 // Event listeners for keydown events - set corresponding keyboard properties to true
 window.addEventListener('keydown', (event => {  
   switch(event.code) {
