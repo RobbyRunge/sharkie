@@ -201,6 +201,8 @@ class CharacterAnimation {
         this.playCharacterAnimation(this.IMAGES_HIT_ELECTRIC);
       } else {
         this.playCharacterAnimation(this.IMAGES_HIT);
+        audioManager.playSound('normal_damage', false);
+        audioManager.setVolume('normal_damage', 0.3);
       }
       this.lastAnimationUpdate.hit = now;
       this.hitTime += 100;

@@ -52,6 +52,7 @@ function loadSounds() {
   audioManager.loadSound('hit_by_bottle', 'audio/hit_by_bottle.mp3');
   audioManager.loadSound('hit_by_fin_slap', 'audio/hit_by_fin_slap.mp3');
   audioManager.loadSound('electric_shock', 'audio/electric_shock.mp3');
+  audioManager.loadSound('normal_damage', 'audio/normal_damage.mp3');
 }
 
 document.addEventListener('DOMContentLoaded', function() {
