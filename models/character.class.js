@@ -141,6 +141,8 @@ class Character extends MoveableObject {
 
   multiplySpeedByCollectCoins() {
     if (this.canActivateSpeedBoost()) {
+      audioManager.playSound('use_coin', false);
+      audioManager.setVolume('use_coin', 0.3);
       this.activateSpeedBoost();
       this.scheduleSpeedBoostReset();
       return true;

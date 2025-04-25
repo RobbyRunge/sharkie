@@ -41,13 +41,16 @@ function loadSounds() {
   audioManager.playBackgroundMusic('background');
   audioManager.loadSound('game_over', 'audio/lose_sound.mp3');
   audioManager.loadSound('win', 'audio/win_sound.mp3');
-  audioManager.loadSound('snoring', 'audio/snoring_sound.mp3')
+  audioManager.loadSound('snoring', 'audio/snoring_sound.mp3');
   // audioManager.loadSound('movement', 'audio/underwater-movement-whoosh-4-186901.mp3'); // look again or for a better one
   audioManager.loadSound('slap', 'audio/fin_slap_sound.mp3');
-  audioManager.loadSound('bubble_shoot', 'audio/bubble_shoot_sound.mp3')
-  audioManager.loadSound('collect_coin', 'audio/collect_coin.mp3')
-  audioManager.loadSound('collect_bottle', 'audio/collect_bottle.mp3')
-  audioManager.loadSound('die_enemie', 'audio/die_enemies.mp3')
+  audioManager.loadSound('bubble_shoot', 'audio/bubble_shoot_sound.mp3');
+  audioManager.loadSound('collect_coin', 'audio/collect_coin.mp3');
+  audioManager.loadSound('use_coin', 'audio/use_coin.mp3');
+  audioManager.loadSound('collect_bottle', 'audio/collect_bottle.mp3');
+  audioManager.loadSound('die_enemie', 'audio/die_enemies.mp3');
+  audioManager.loadSound('hit_by_bottle', 'audio/hit_by_bottle.mp3');
+  audioManager.loadSound('hit_by_fin_slap', 'audio/hit_by_fin_slap.mp3');
 }
 
 document.addEventListener('DOMContentLoaded', function() {

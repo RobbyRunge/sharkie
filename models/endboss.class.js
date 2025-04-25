@@ -160,6 +160,8 @@ class Endboss extends MoveableObject {
   }
 
   applyBottleHitEffects() {
+    audioManager.playSound('hit_by_bottle');
+    audioManager.setVolume('hit_by_bottle', 0.3); 
     this.x += 15; 
     this.speed = 0; 
     setTimeout(() => {
@@ -168,6 +170,8 @@ class Endboss extends MoveableObject {
   }
 
   applySlapHitEffects() {
+    audioManager.playSound('hit_by_fin_slap');
+    audioManager.setVolume('hit_by_fin_slap', 0.3); 
     this.x += 5; 
     this.speed = 0; 
     setTimeout(() => {
