@@ -19,6 +19,7 @@ class CharacterAnimation {
   shootingProcessed = false;
   currentDeadFrame = 0;
   deathAnimationComplete = false;
+  snoringTimeoutId = null;
   animationSpeed = {
     swimming: 100,
     standing: 150,
@@ -217,7 +218,7 @@ class CharacterAnimation {
   startSlapping() {
     if (!this.isSlapping) {
       if (this.isInSleepMode) {
-        audioManager.stopSound('snoring');
+        this.exitSleepMode();
       }
       audioManager.playSound('slap');
       audioManager.setVolume('slap', 0.3);
@@ -345,14 +346,9 @@ class CharacterAnimation {
 
   handleMovementAnimation(now) {
     if (this.isInSleepMode) {
-      audioManager.stopSound('snoring');
+      this.exitSleepMode();
     }
-    // audioManager.playSound('movement');
-    // audioManager.setVolume('movement', 0.1);
     this.idleTime = 0;
-    this.isInSleepMode = false;
-    this.sleepCycleComplete = false;
-    this.currentSleepFrame = 0;
     if (now - this.lastAnimationUpdate.swimming >= this.animationSpeed.swimming) {
       this.playCharacterAnimation(this.IMAGES_SWIMMING);
       this.lastAnimationUpdate.swimming = now;
@@ -370,15 +366,33 @@ class CharacterAnimation {
 
   updateIdleState() {
     this.idleTime += 100;
-    if (this.idleTime > 5000 && !this.isInSleepMode) {
+    if (this.idleTime > 1000 && !this.isInSleepMode) {
       this.isInSleepMode = true;
       this.sleepCycleComplete = false;
       this.currentSleepFrame = 0;
-      setTimeout(() => {
-        audioManager.playSound('snoring', false);
-        audioManager.setVolume('snoring', 0.05);
-      }, 3200); 
+      if (this.snoringTimeoutId) {
+        clearTimeout(this.snoringTimeoutId);
+      }
+      this.snoringTimeoutId = setTimeout(() => {
+        if (this.isInSleepMode) {
+          audioManager.playSound('snoring', false);
+          audioManager.setVolume('snoring', 0.05);
+        }
+      }, 3200);
     }  
+  }
+
+  exitSleepMode() {
+    if (this.isInSleepMode) {
+      this.isInSleepMode = false;
+      this.sleepCycleComplete = false;
+      this.currentSleepFrame = 0;
+      if (this.snoringTimeoutId) {
+        clearTimeout(this.snoringTimeoutId);
+        this.snoringTimeoutId = null;
+      }
+      audioManager.stopSound('snoring');
+    }
   }
 
   playSlowSleepAnimation(now) {
