@@ -215,25 +215,6 @@ class CharacterAnimation {
     }
   }
 
-  startSlapping() {
-    if (!this.isSlapping) {
-      if (this.isInSleepMode) {
-        this.exitSleepMode();
-      }
-      audioManager.playSound('slap');
-      audioManager.setVolume('slap', 0.3);
-      this.idleTime = 0;
-      this.isInSleepMode = false;
-      this.sleepCycleComplete = false;
-      this.currentSleepFrame = 0;
-      this.isSlapping = true;
-      this.currentSlapFrame = 0;
-      this.slapComplete = false;
-      return true;
-    }
-    return false;
-  }
-
   handleSlapingAnimation(now) {
     if (this.shouldSkipSlapAnimationUpdate(now)) return;
     this.updateSlapAnimationTimestamp(now);
@@ -259,33 +240,8 @@ class CharacterAnimation {
 
   checkForSlapAnimationCompletion() {
     if (this.currentSlapFrame >= this.IMAGES_SLAP.length) {
-      this.resetSlapState();
+      this.character.resetSlapState();
     }
-  }
-
-  resetSlapState() {
-    this.isSlapping = false;
-    this.currentSlapFrame = 0;
-  }
-
-  startShooting() {
-    if (this.character.bottles > 0 && !this.isShooting && this.canShoot) {
-      if (this.isInSleepMode) {
-        audioManager.stopSound('snoring');
-      }
-      setTimeout(() => {
-        audioManager.playSound('bubble_shoot', false);
-        audioManager.setVolume('bubble_shoot', 0.3);
-      }, 760);
-      this.isShooting = true;
-      this.canShoot = false;
-      this.shootingComplete = false;
-      this.shootingProcessed = false;
-      this.shootingTime = 0;
-      this.currentShootingFrame = 0;
-      return true;
-    }
-    return false;
   }
 
   handleShootingAnimation(now) {
@@ -325,23 +281,8 @@ class CharacterAnimation {
   
   checkForAnimationReset() {
     if (this.currentShootingFrame >= this.IMAGES_SHOOTING.length) {
-      this.resetShootingState();
+      this.character.resetShootingState();
     }
-  }
-
-  resetShootingState() {
-    this.idleTime = 0;
-    this.isInSleepMode = false;
-    this.sleepCycleComplete = false;
-    this.currentSleepFrame = 0;
-    this.isShooting = false;
-    this.shootingTime = 0;
-    this.shootingComplete = false;
-    this.shootingProcessed = false;
-    this.currentShootingFrame = 0;
-    setTimeout(() => {
-      this.canShoot = true;
-    }, 200);
   }
 
   handleMovementAnimation(now) {
@@ -436,15 +377,5 @@ class CharacterAnimation {
     let path = images[index];
     this.character.img = this.character.imageCache[path];
     this.character.currentImage++;
-  }
-
-  triggerHit(hitType = 'poison') {
-    if (!this.character.isDead() && !this.isHit) {
-      this.isHit = true;
-      this.hitTime = 0;
-      this.hitType = hitType; 
-      return true;
-    }
-    return false;
   }
 }

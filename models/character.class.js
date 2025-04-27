@@ -104,18 +104,79 @@ class Character extends MoveableObject {
     }
   }
 
+  triggerHit(hitType = 'poison') {
+    if (!this.isDead() && !this.animation.isHit) {
+      this.animation.isHit = true;
+      this.animation.hitTime = 0;
+      this.animation.hitType = hitType; 
+      return true;
+    }
+    return false;
+  }
+
   hit(hitType = 'poison', damage = 5) {
-    if (this.animation.triggerHit(hitType)) {
+    if (this.triggerHit(hitType)) {
       super.hit(damage);
     }
   }
 
   startSlapping() {
-    return this.animation.startSlapping();
+    if (!this.animation.isSlapping) {
+      if (this.animation.isInSleepMode) {
+        this.animation.exitSleepMode();
+      }
+      audioManager.playSound('slap');
+      audioManager.setVolume('slap', 0.3);
+      this.animation.idleTime = 0;
+      this.animation.isInSleepMode = false;
+      this.animation.sleepCycleComplete = false;
+      this.animation.currentSleepFrame = 0;
+      this.animation.isSlapping = true;
+      this.animation.currentSlapFrame = 0;
+      this.animation.slapComplete = false;
+      return true;
+    }
+    return false;
+  }
+
+  resetSlapState() {
+    this.animation.isSlapping = false;
+    this.animation.currentSlapFrame = 0;
   }
 
   startShooting() {
-    return this.animation.startShooting();
+    if (this.bottles > 0 && !this.animation.isShooting && this.animation.canShoot) {
+      if (this.animation.isInSleepMode) {
+        audioManager.stopSound('snoring');
+      }
+      setTimeout(() => {
+        audioManager.playSound('bubble_shoot', false);
+        audioManager.setVolume('bubble_shoot', 0.3);
+      }, 760);
+      this.animation.isShooting = true;
+      this.animation.canShoot = false;
+      this.animation.shootingComplete = false;
+      this.animation.shootingProcessed = false;
+      this.animation.shootingTime = 0;
+      this.animation.currentShootingFrame = 0;
+      return true;
+    }
+    return false;
+  }
+
+  resetShootingState() {
+    this.animation.idleTime = 0;
+    this.animation.isInSleepMode = false;
+    this.animation.sleepCycleComplete = false;
+    this.animation.currentSleepFrame = 0;
+    this.animation.isShooting = false;
+    this.animation.shootingTime = 0;
+    this.animation.shootingComplete = false;
+    this.animation.shootingProcessed = false;
+    this.animation.currentShootingFrame = 0;
+    setTimeout(() => {
+      this.animation.canShoot = true;
+    }, 200);
   }
 
   collectBottle() {
