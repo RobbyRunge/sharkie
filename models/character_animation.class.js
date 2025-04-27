@@ -366,7 +366,7 @@ class CharacterAnimation {
 
   updateIdleState() {
     this.idleTime += 100;
-    if (this.idleTime > 1000 && !this.isInSleepMode) {
+    if (this.idleTime > 5000 && !this.isInSleepMode) {
       this.isInSleepMode = true;
       this.sleepCycleComplete = false;
       this.currentSleepFrame = 0;
