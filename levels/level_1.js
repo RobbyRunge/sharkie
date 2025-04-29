@@ -17,20 +17,20 @@ function initLevel() {
     new Posion(),
     new Posion(),
 
-    // new GreenFish(), 
-    // new GreenFish(), 
-    // new OrangeFish(),
-    // new OrangeFish(),
-    // new RedFish(),
-    // new RedFish(),
-    // new LilaJellyFish(),
-    // new LilaJellyFish(),
-    // new YellowJellyFish(),
-    // new YellowJellyFish(),
-    // new GreenJellyFish(), // strobg enemy
-    // new GreenJellyFish(), // strobg enemy
-    // new PinkJellyFish(), // strong enemy
-    // new PinkJellyFish(), // strong enemy
+    new GreenFish(), 
+    new GreenFish(), 
+    new OrangeFish(),
+    new OrangeFish(),
+    new RedFish(),
+    new RedFish(),
+    new LilaJellyFish(),
+    new LilaJellyFish(),
+    new YellowJellyFish(),
+    new YellowJellyFish(),
+    new GreenJellyFish(), // strobg enemy
+    new GreenJellyFish(), // strobg enemy
+    new PinkJellyFish(), // strong enemy
+    new PinkJellyFish(), // strong enemy
     new Endboss(),
   ],
   [

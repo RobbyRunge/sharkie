@@ -9,6 +9,7 @@ class World {
   coinBar = new CoinBar();
   posionBar = new PosionBar();
   throwableObject = [];
+  SLAP_RANGE = 30; 
 
   constructor(canvas, keyboard) {
     this.ctx = canvas.getContext("2d");
@@ -19,11 +20,6 @@ class World {
     this.run();
     this.updatePoisonBar();
     this.updateCoinBar(); 
-
-    // Slap attack parameters
-    this.SLAP_RANGE = 30; // Horizontal reach of slap attack
-    this.SLAP_VERTICAL_OFFSET_TOP = 10; // Vertical offset from top of character
-    this.SLAP_VERTICAL_OFFSET_BOTTOM = 10; // Vertical offset from bottom of character
   }
 
   setWorld() {
@@ -151,8 +147,8 @@ class World {
   }
   
   isInVerticalSlapRange(enemy) {
-    return enemy.y + enemy.height >= this.character.y + this.SLAP_VERTICAL_OFFSET_TOP && 
-           enemy.y <= this.character.y + this.character.height - this.SLAP_VERTICAL_OFFSET_BOTTOM;
+    return enemy.y + enemy.height >= this.character.y + 80 && 
+           enemy.y <= this.character.y + this.character.height - 40;
   }
 
   cleanupDeadFish() {

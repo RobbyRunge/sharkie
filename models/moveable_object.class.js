@@ -33,11 +33,11 @@ class MoveableObject extends DrawableObject {
   }
 
   startMovement() {
-    setStoppableInterval(() => {
-        if (isGameActive && !this.isDying) {
-            this.x -= this.speed;
-        }
-    }, 1000/60);
+    // setStoppableInterval(() => {
+    //     if (isGameActive && !this.isDying) {
+    //         this.x -= this.speed;
+    //     }
+    // }, 1000/60);
   }
 
   playAnimation(images) {
