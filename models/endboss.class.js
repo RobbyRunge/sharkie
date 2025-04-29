@@ -67,7 +67,6 @@ class Endboss extends MoveableObject {
     './img/2.Enemy/3.Final_Enemy/Dead/Mesa de trabajo 2 copia 8.png',
     './img/2.Enemy/3.Final_Enemy/Dead/Mesa de trabajo 2 copia 9.png',
     './img/2.Enemy/3.Final_Enemy/Dead/Mesa de trabajo 2 copia 10.png',
-    './img/2.Enemy/3.Final_Enemy/Dead/Mesa de trabajo 2.png'
   ];
 
   constructor() {
