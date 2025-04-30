@@ -16,6 +16,9 @@ function initLevel() {
     new Posion(),
     new Posion(),
     new Posion(),
+    new Posion(),
+    new Posion(),
+    new Posion(),
 
     new GreenFish(), 
     new GreenFish(), 
@@ -27,10 +30,10 @@ function initLevel() {
     new LilaJellyFish(),
     new YellowJellyFish(),
     new YellowJellyFish(),
-    new GreenJellyFish(), // strobg enemy
-    new GreenJellyFish(), // strobg enemy
-    new PinkJellyFish(), // strong enemy
-    new PinkJellyFish(), // strong enemy
+    new GreenJellyFish(), 
+    new GreenJellyFish(), 
+    new PinkJellyFish(), 
+    new PinkJellyFish(),
     new Endboss(),
   ],
   [
