@@ -273,7 +273,6 @@ class World {
 
   drawObjectAtOrigin(moveableObject) {
     moveableObject.draw(this.ctx, 0, 0);
-    moveableObject.drawFrame(this.ctx, 0, 0);
   }
 
   drawObject(moveableObject) {
@@ -295,7 +294,6 @@ class World {
 
   drawAndFrameObject(moveableObject) {
     moveableObject.draw(this.ctx);
-    moveableObject.drawFrame(this.ctx);
   }
 
   restoreOriginalDirection(moveableObject) {
