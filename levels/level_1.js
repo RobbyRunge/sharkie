@@ -1,5 +1,9 @@
 let level_1;
 
+/**
+ * Initializes the first level of the game
+ * Creates the level with enemies, collectibles and background objects
+ */
 function initLevel() {
   level_1 = new Level(
   [
