@@ -210,7 +210,7 @@ ul {
 }
 
 #game_container:fullscreen .img_position_container {
-  bottom: 6%;
+  bottom: 0%;
   max-width: 90%;
 }
 
@@ -310,17 +310,16 @@ ul {
   to { transform: scale(1.1); }
 }
 
-/* Position controls relative to the canvas */
 #game_container {
-  position: relative; /* Add this to make absolute positioning work relative to container */
+  position: relative;
 }
 
 .control_container {
   position: absolute;
-  bottom: 5%; /* Use percentage instead of fixed px */
+  bottom: 5%; 
   left: 0;
   right: 0;
-  width: 90%; /* Use percentage instead of fixed max-width */
+  width: 90%;
   margin: 0 auto;
   padding: 0 15px;
   box-sizing: border-box;
@@ -331,7 +330,6 @@ ul {
   display: none;
 }
 
-/* Improved responsive scaling for buttons */
 .control_button_design {
   display: flex;
   align-items: center;
@@ -341,9 +339,9 @@ ul {
   border: none;
   border-radius: 12px;
   padding: 0;
-  font-size: calc(16px + 1vmin); /* Responsive font size */
-  width: calc(40px + 1vmin);    /* Responsive width */
-  height: calc(40px + 1vmin);   /* Responsive height */
+  font-size: calc(16px + 1vmin);
+  width: calc(40px + 1vmin);
+  height: calc(40px + 1vmin);
   transition: background-color 0.2s;
 }
 
@@ -367,7 +365,7 @@ ul {
   .img_position_container {
     justify-content: flex-end;
     gap: 10px;
-    top: -88%;
+    top: -85%;
     bottom: none;
   }
 
@@ -438,8 +436,8 @@ ul {
   }
 
   .img_size_control {
-    width: 32px;
-    height: 32px;
+    width: 40px;
+    height: 40px;
     cursor: pointer;
     background-color: rgba(255, 255, 255, 0.8);
     border-radius: 12px;
@@ -469,20 +467,9 @@ ul {
   }
 }
 
-@media only screen and (max-height: 480px) {
-  canvas {
-    height: 100vh;
-  }
-}
-
 @media (orientation: landscape) and (max-height: 500px) {
   .control_container {
     bottom: 2%;
-  }
-  
-  .img_size_control {
-    width: calc(22px + 1vmin);
-    height: calc(22px + 1vmin);
   }
 }
 
@@ -494,5 +481,40 @@ ul {
   
   .control_container {
     padding: 0 8px;
+  }
+}
+
+@media only screen and (max-height: 480px) {
+  canvas {
+    height: calc(100vh - 100px);
+    width: calc(100vw - 100px);
+  }
+
+  .img_position_container,
+  .control_container  {
+    max-width: none;
+  }
+
+  h1 {
+    font-size: 40px;
+  }
+
+  .menu_button {
+    padding: 8px 16px;
+    font-size: 12px;
+  }
+
+  .overlay_content {
+    padding: 15px;
+    max-width: 50%;
+  }
+
+  .overlay_content h2 {
+    font-size: 16px;
+  }
+
+  .overlay_content p,
+  ul {
+    font-size: 12px;
   }
 }
