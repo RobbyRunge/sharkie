@@ -1,3 +1,7 @@
+/**
+ * Returns the HTML template for the game over screen
+ * @returns {string} HTML string containing the game over screen elements
+ */
 function getGameOverTemplate() {
   return `
     <div id="game_over_screen">
@@ -8,6 +12,10 @@ function getGameOverTemplate() {
   `;
 }
 
+/**
+ * Returns the HTML template for the win screen
+ * @returns {string} HTML string containing the win screen elements
+ */
 function getWinTemplate() {
   return `
     <div id="win_screen">

@@ -5,6 +5,10 @@ let intervalIds = [];
 let isGameActive = true; 
 let audioManager; 
 
+/**
+ * Checks device orientation and displays a rotation message on mobile devices in portrait mode
+ * Shows a message when screen width is less than 720px and height is greater than width
+ */
 function checkOrientation() {
   let rotationMessage = document.getElementById('rotation_message');
   if (window.innerWidth < 720 && window.innerHeight > window.innerWidth) {
@@ -18,12 +22,22 @@ window.addEventListener('load', checkOrientation);
 window.addEventListener('resize', checkOrientation);
 window.addEventListener('orientationchange', checkOrientation);
 
+/**
+ * Creates an interval that can be stopped later
+ * @param {Function} fn - Function to execute at each interval
+ * @param {number} time - Time between executions in milliseconds
+ * @returns {number} The interval ID
+ */
 function setStoppableInterval(fn, time) {
   let id = setInterval(fn, time);
   intervalIds.push(id);
   return id;
 }
 
+/**
+ * Initializes the game by setting up all required components
+ * Creates audio manager, keyboard handler, loads sounds, initializes level and world
+ */
 function init() {
   intervalIds = []; 
   isGameActive = true;
@@ -35,6 +49,10 @@ function init() {
   world = new World(canvas, keyboard);
 }
 
+/**
+ * Loads and initializes all game sound effects and music
+ * Sets up background music and loads all required sound effects
+ */
 function loadSounds() {
   audioManager.loadSound('background', 'audio/background_sound.mp3');
   audioManager.setVolume('background', 0.3);
@@ -55,6 +73,9 @@ function loadSounds() {
   audioManager.loadSound('normal_damage', 'audio/normal_damage.mp3');
 }
 
+/**
+ * Sets up event listener for the sound toggle button once the DOM is loaded
+ */
 document.addEventListener('DOMContentLoaded', function() {
   const soundIcon = document.getElementById('sound_icon');
   if (soundIcon) {
@@ -62,6 +83,11 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 });
 
+/**
+ * Toggles game sound on and off
+ * Updates the sound icon to reflect current sound state
+ * @returns {void}
+ */
 function toggleSound() {
   if (!audioManager) return;
   const isMuted = audioManager.toggleMute();
@@ -73,6 +99,10 @@ function toggleSound() {
   }
 }
 
+/**
+ * Handles entering or exiting fullscreen mode for the game
+ * Toggles fullscreen state based on current display mode
+ */
 function handleFullscreen() {
   const canvas = document.getElementById('game_container');
   if (!document.fullscreenElement) {
@@ -82,6 +112,10 @@ function handleFullscreen() {
   }
 }
 
+/**
+ * Opens fullscreen mode with cross-browser support
+ * @param {HTMLElement} element - The element to display in fullscreen
+ */
 function openFullscreen(element) {
   if (element.requestFullscreen) {
     element.requestFullscreen();
@@ -92,6 +126,10 @@ function openFullscreen(element) {
   }
 }
 
+/**
+ * Exits fullscreen mode with cross-browser support
+ * Handles different browser implementations for exiting fullscreen
+ */
 function closeFullscreen() {
   if (document.fullscreenElement || document.webkitFullscreenElement || document.msFullscreenElement) {
     if (document.exitFullscreen) {
