@@ -123,8 +123,8 @@ class World {
   
   getSlapPosition() {
     return this.character.otherDirection ? 
-      this.character.x - this.SLAP_RANGE : // Left slap
-      this.character.x + this.character.width; // Right slap
+      this.character.x - this.SLAP_RANGE :
+      this.character.x + this.character.width; 
   }
   
   checkEnemySlapCollision(enemy, slapX) {
@@ -142,8 +142,8 @@ class World {
   
   isInHorizontalSlapRange(enemy, slapX) {
     return this.character.otherDirection ? 
-      (enemy.x + enemy.width >= slapX && enemy.x <= this.character.x) : // Left slap range
-      (enemy.x <= slapX + this.SLAP_RANGE && enemy.x + enemy.width >= slapX); // Right slap range
+      (enemy.x + enemy.width >= slapX && enemy.x <= this.character.x) : 
+      (enemy.x <= slapX + this.SLAP_RANGE && enemy.x + enemy.width >= slapX); 
   }
   
   isInVerticalSlapRange(enemy) {
