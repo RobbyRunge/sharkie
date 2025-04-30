@@ -20,6 +20,7 @@ class CharacterAnimation {
   currentDeadFrame = 0;
   deathAnimationComplete = false;
   snoringTimeoutId = null;
+  isMovementSoundPlaying = false;
   animationSpeed = {
     swimming: 100,
     standing: 150,
@@ -286,6 +287,12 @@ class CharacterAnimation {
   }
 
   handleMovementAnimation(now) {
+    if (!this.isMovementSoundPlaying) {
+      audioManager.playSound('movement', false);
+      audioManager.setVolume('movement', 0.1);
+      this.isMovementSoundPlaying = true;
+    }
+    
     if (this.isInSleepMode) {
       this.exitSleepMode();
     }
@@ -297,6 +304,11 @@ class CharacterAnimation {
   }
 
   handleIdleAnimation(now) {
+    if (this.isMovementSoundPlaying) {
+      audioManager.stopSound('movement');
+      this.isMovementSoundPlaying = false;
+    }
+    
     this.updateIdleState();
     if (this.isInSleepMode) {
       this.playSlowSleepAnimation(now);
