@@ -14,7 +14,7 @@ class Posion extends MoveableObject {
     super();
     this.loadImage(this.IMAGES_POSION[0]);
     this.loadImages(this.IMAGES_POSION);
-    this.x = 300 + Math.random() * 2000;
+    this.x = 400 + Math.random() * 2000;
     this.y = 50 + Math.random() * 300;   
     this.width = 60;
     this.height = 70;
