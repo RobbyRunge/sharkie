@@ -1,3 +1,6 @@
+/**
+ * Handles keyboard and touch input for game controls
+ */
 class GameKeyboard {
   LEFT = false;
   RIGHT = false;
@@ -7,11 +10,18 @@ class GameKeyboard {
   D = false;
   E = false; 
 
+  /**
+   * Initializes the keyboard handler and binds key events
+   */
   constructor() {
     this.bindKeyPressEvents();
     this.bindButtonsPressEvents();
   }
 
+  /**
+   * Sets up touch event listeners for mobile controls
+   * Handles touch start and end events for all game actions
+   */
   bindKeyPressEvents() {
     document.getElementById('game_container').addEventListener('touchmove', (e) => {
       e.preventDefault();
@@ -88,6 +98,10 @@ class GameKeyboard {
     });
   }
 
+  /**
+   * Sets up keyboard event listeners
+   * Handles key up and down events for all game controls
+   */
   bindButtonsPressEvents() {
     window.addEventListener('keyup', (e) => {
       if (e.key === 'ArrowLeft') this.LEFT = false;

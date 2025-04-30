@@ -10,6 +10,9 @@ class Posion extends MoveableObject {
     './img/4.Marcadores/Posión/Animada/8.png'
   ];
 
+  /**
+   * Creates a new poison object at a random position
+   */
   constructor() {
     super();
     this.loadImage(this.IMAGES_POSION[0]);
@@ -26,6 +29,9 @@ class Posion extends MoveableObject {
     this.animate();
   }
 
+  /**
+   * Initializes animation for this poison bottle
+   */
   animate() {
     setStoppableInterval(() => {
       if (isGameActive) {

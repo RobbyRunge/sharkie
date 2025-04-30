@@ -21,6 +21,9 @@ class RedFish extends DestructibleEnemy {
     './img/2.Enemy/1.Puffer_fish(3_color_options)/4.DIE/dead_fish_3_3.png',
   ];
 
+  /**
+   * Creates a new RedFish at a random position
+   */
   constructor() {
     super();
     this.loadImage(this.IMAGES_SWIMMING[0]);
@@ -37,10 +40,16 @@ class RedFish extends DestructibleEnemy {
     this.animate();
   }
 
+  /**
+   * Initializes animation for this fish
+   */
   animate() {
     this.startAnimation();
   }
 
+  /**
+   * Sets up animation intervals for swimming and death animations
+   */
   startAnimation() {
     setStoppableInterval(() => {
       if (isGameActive) {

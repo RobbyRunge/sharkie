@@ -18,6 +18,9 @@ class LilaJellyFish extends DestructibleEnemy {
     './img/2.Enemy/2.Jelly_fish/Dead/Yellow/y4.png',
   ];
 
+  /**
+   * Creates a new LilaJellyFish at a random position
+   */
   constructor() {
     super();
     this.loadImage(this.IMAGES_SWIMMING[0]);
@@ -34,10 +37,16 @@ class LilaJellyFish extends DestructibleEnemy {
     this.animate();
   }
 
+  /**
+   * Initializes animation for this jellyfish
+   */
   animate() {
     this.startAnimation();
   }
 
+  /**
+   * Sets up animation intervals for swimming and death animations
+   */
   startAnimation() {
     setStoppableInterval(() => {
       if (isGameActive) {

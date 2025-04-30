@@ -3,6 +3,9 @@ class DestructibleEnemy extends MoveableObject {
     currentDeadFrame = 0;
     deathAnimationComplete = false;
     
+    /**
+     * Initiates the death sequence for the enemy
+     */
     die() {
         audioManager.playSound('die_enemie', false);
         audioManager.setVolume('die_enemie', 0.2);
@@ -11,6 +14,9 @@ class DestructibleEnemy extends MoveableObject {
         this.deathAnimationComplete = false;
     }
     
+    /**
+     * Plays the death animation sequence
+     */
     playDeathAnimation() {
         if (this.currentDeadFrame < this.IMAGES_DEAD.length) {
             this.img = this.imageCache[this.IMAGES_DEAD[this.currentDeadFrame]];

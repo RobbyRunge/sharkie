@@ -140,11 +140,18 @@ class CharacterAnimation {
     './img/1.Sharkie/6.dead/1.Poisoned/12.png',
   ];
 
+  /**
+   * Creates a new character animation handler
+   * @param {Character} character - The character to animate
+   */
   constructor(character) {
     this.character = character;
     this.loadAllImages();
   }
 
+  /**
+   * Loads all character animation images
+   */
   loadAllImages() {
     this.character.loadImage(this.IMAGES_STAND[0]);
     this.character.loadImages(this.IMAGES_STAND);
@@ -157,10 +164,16 @@ class CharacterAnimation {
     this.character.loadImages(this.IMAGES_DEAD);
   }
 
+  /**
+   * Sets up the animation system
+   */
   animate() {
     this.setupAnimationLoop();
   }
 
+  /**
+   * Sets up the main animation loop
+   */
   setupAnimationLoop() {
     setStoppableInterval(() => {
       if (!isGameActive) return;
@@ -181,6 +194,9 @@ class CharacterAnimation {
     }, 100);
   }
 
+  /**
+   * Handles character death animation
+   */
   handleDeadAnimation() {
     if (this.currentDeadFrame < this.IMAGES_DEAD.length) {
       this.character.img = this.character.imageCache[this.IMAGES_DEAD[this.currentDeadFrame]];
@@ -193,6 +209,10 @@ class CharacterAnimation {
     }
   }
 
+  /**
+   * Handles hit animation
+   * @param {number} now - Current timestamp
+   */
   handleHitAnimation(now) {
     if (now - this.lastAnimationUpdate.hit >= this.animationSpeed.hit) {
       if (this.hitType === 'electric' && this.isHit) {
@@ -216,6 +236,10 @@ class CharacterAnimation {
     }
   }
 
+  /**
+   * Handles slap attack animation
+   * @param {number} now - Current timestamp
+   */
   handleSlapingAnimation(now) {
     if (this.shouldSkipSlapAnimationUpdate(now)) return;
     this.updateSlapAnimationTimestamp(now);
@@ -223,15 +247,27 @@ class CharacterAnimation {
     this.checkForSlapAnimationCompletion();
   }
 
+  /**
+   * Determines if slap animation update should be skipped
+   * @param {number} now - Current timestamp
+   * @returns {boolean} True if update should be skipped
+   */
   shouldSkipSlapAnimationUpdate(now) {
     const timeElapsed = now - this.lastAnimationUpdate.slapping;
     return timeElapsed < this.animationSpeed.slapping;
   }
 
+  /**
+   * Updates the timestamp for slap animation
+   * @param {number} now - Current timestamp
+   */
   updateSlapAnimationTimestamp(now) {
     this.lastAnimationUpdate.slapping = now;
   }
 
+  /**
+   * Advances to the next frame in slap animation
+   */
   advanceSlapFrame() {
     if (this.currentSlapFrame < this.IMAGES_SLAP.length) {
       this.character.img = this.character.imageCache[this.IMAGES_SLAP[this.currentSlapFrame]];
@@ -239,12 +275,19 @@ class CharacterAnimation {
     }
   }
 
+  /**
+   * Checks if slap animation has completed
+   */
   checkForSlapAnimationCompletion() {
     if (this.currentSlapFrame >= this.IMAGES_SLAP.length) {
       this.character.resetSlapState();
     }
   }
 
+  /**
+   * Handles shooting animation
+   * @param {number} now - Current timestamp
+   */
   handleShootingAnimation(now) {
     if (this.shouldSkipAnimationUpdate(now)) return;
     this.updateAnimationTimestamp(now);
@@ -254,15 +297,27 @@ class CharacterAnimation {
     this.checkForAnimationReset();
   }
   
+  /**
+   * Determines if animation update should be skipped
+   * @param {number} now - Current timestamp
+   * @returns {boolean} True if update should be skipped
+   */
   shouldSkipAnimationUpdate(now) {
     const timeElapsed = now - this.lastAnimationUpdate.shooting;
     return timeElapsed < this.animationSpeed.shooting;
   }
   
+  /**
+   * Updates the timestamp for the current animation
+   * @param {number} now - Current timestamp
+   */
   updateAnimationTimestamp(now) {
     this.lastAnimationUpdate.shooting = now;
   }
   
+  /**
+   * Advances to the next frame in shooting animation
+   */
   advanceShootingFrame() {
     if (this.currentShootingFrame < this.IMAGES_SHOOTING.length) {
       this.character.img = this.character.imageCache[this.IMAGES_SHOOTING[this.currentShootingFrame]];
@@ -270,22 +325,35 @@ class CharacterAnimation {
     }
   }
   
+  /**
+   * Tracks animation progress
+   */
   trackAnimationProgress() {
     this.shootingTime += 100;
   }
   
+  /**
+   * Checks if animation has completed
+   */
   checkForAnimationCompletion() {
     if (this.currentShootingFrame >= this.IMAGES_SHOOTING.length - 1 && !this.shootingComplete) {
       this.shootingComplete = true;
     }
   }
   
+  /**
+   * Checks if animation should be reset
+   */
   checkForAnimationReset() {
     if (this.currentShootingFrame >= this.IMAGES_SHOOTING.length) {
       this.character.resetShootingState();
     }
   }
 
+  /**
+   * Handles swimming animation when character is moving
+   * @param {number} now - Current timestamp
+   */
   handleMovementAnimation(now) {
     if (!this.isMovementSoundPlaying) {
       audioManager.playSound('movement', false);
@@ -303,6 +371,10 @@ class CharacterAnimation {
     }
   }
 
+  /**
+   * Handles idle animation when character is not moving
+   * @param {number} now - Current timestamp
+   */
   handleIdleAnimation(now) {
     if (this.isMovementSoundPlaying) {
       audioManager.stopSound('movement');
@@ -317,6 +389,9 @@ class CharacterAnimation {
     }
   }
 
+  /**
+   * Updates the idle state and sleep mode
+   */
   updateIdleState() {
     this.idleTime += 100;
     if (this.idleTime > 5000 && !this.isInSleepMode) {
@@ -335,6 +410,9 @@ class CharacterAnimation {
     }  
   }
 
+  /**
+   * Exits sleep animation mode
+   */
   exitSleepMode() {
     if (this.isInSleepMode) {
       this.isInSleepMode = false;
@@ -348,6 +426,10 @@ class CharacterAnimation {
     }
   }
 
+  /**
+   * Plays the sleeping animation
+   * @param {number} now - Current timestamp
+   */
   playSlowSleepAnimation(now) {
     if (now - this.lastAnimationUpdate.sleeping >= this.animationSpeed.sleeping) {
       this.lastAnimationUpdate.sleeping = now;
@@ -359,6 +441,9 @@ class CharacterAnimation {
     }
   }
   
+  /**
+   * Plays the initial part of sleep animation sequence
+   */
   playInitialSleepAnimation() {
     this.character.img = this.character.imageCache[this.IMAGES_SLEEP[this.currentSleepFrame]];
     this.currentSleepFrame++;
@@ -368,6 +453,9 @@ class CharacterAnimation {
     }
   }
   
+  /**
+   * Plays the looping part of sleep animation
+   */
   playLoopingSleepAnimation() {
     this.character.img = this.character.imageCache[this.IMAGES_SLEEP[this.currentSleepFrame]];
     this.currentSleepFrame++; 
@@ -376,6 +464,10 @@ class CharacterAnimation {
     }
   }
 
+  /**
+   * Plays the standing idle animation
+   * @param {number} now - Current timestamp
+   */
   playStandingAnimation(now) {
     if (now - this.lastAnimationUpdate.standing >= this.animationSpeed.standing) {
       this.playCharacterAnimation(this.IMAGES_STAND);
@@ -383,6 +475,10 @@ class CharacterAnimation {
     }
   }
 
+  /**
+   * Plays a character animation from image array
+   * @param {string[]} images - Array of image paths
+   */
   playCharacterAnimation(images) {
     if (!isGameActive || !images || !images.length) return;
     let index = this.character.currentImage % images.length;

@@ -10,6 +10,9 @@ class CoinBar extends DrawableObject {
     './img/4.Marcadores/green/Coin/100.png',
   ];
 
+  /**
+   * Creates a new coin bar at specified position
+   */
   constructor() {
     super();
     this.loadImages(this.IMAGES_COINS);
@@ -20,12 +23,20 @@ class CoinBar extends DrawableObject {
     this.setPercentage(0);
   }
 
+  /**
+   * Updates the coin bar display based on the percentage value
+   * @param {number} percentage - Coin percentage value (0-100)
+   */
   setPercentage(percentage) {
     this.percentage = percentage;
     let path = this.IMAGES_COINS[this.resolveImageIndex()];
     this.img = this.imageCache[path];
   }  
     
+  /**
+   * Determines which image to use based on current percentage
+   * @returns {number} Index of the image to display
+   */
   resolveImageIndex() {
     if (this.percentage >= 100) {
       return 5;

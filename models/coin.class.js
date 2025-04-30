@@ -6,6 +6,9 @@ class Coin extends MoveableObject {
     './img/4.Marcadores/1. Coins/4.png',
   ];
 
+  /**
+   * Creates a new coin at a random position
+   */
   constructor() {
     super();
     this.loadImage(this.IMAGES_COIN[0]);
@@ -22,6 +25,9 @@ class Coin extends MoveableObject {
     this.animate();
   }
 
+  /**
+   * Initializes animation for this coin
+   */
   animate() {
     setStoppableInterval(() => {
       if (isGameActive) {

@@ -69,6 +69,9 @@ class Endboss extends MoveableObject {
     './img/2.Enemy/3.Final_Enemy/Dead/Mesa de trabajo 2 copia 10.png',
   ];
 
+  /**
+   * Creates a new Endboss instance
+   */
   constructor() {
     super().loadImage('img/2.Enemy/3.Final_Enemy/1.Introduce/1.png');
     this.loadImages(this.IMAGES_STAND);
@@ -84,6 +87,9 @@ class Endboss extends MoveableObject {
     this.animate();   
   }  
 
+  /**
+   * Sets up the animation and behavior of the endboss
+   */
   animate() {
     this.animationFrame = 0;
     this.animationStarted = false;
@@ -99,6 +105,10 @@ class Endboss extends MoveableObject {
     }, 120);
   }
 
+  /**
+   * Processes damage to the endboss
+   * @param {string} attackType - Type of attack (bottle or slap)
+   */
   hit(attackType = 'bottle') {
     if (this.isDying || this.isInvulnerable) {
       return;
@@ -112,6 +122,11 @@ class Endboss extends MoveableObject {
     this.startHitReaction(attackType);
   }
 
+  /**
+   * Calculates damage based on attack type
+   * @param {string} attackType - Type of attack
+   * @returns {number} Amount of damage to apply
+   */
   calculateDamage(attackType) {
     if (attackType === 'slap') {
       return 10; 
@@ -120,6 +135,10 @@ class Endboss extends MoveableObject {
     }
   }
 
+  /**
+   * Applies damage to the endboss and sets temporary invulnerability
+   * @param {number} damage - Amount of damage to apply
+   */
   applyDamage(damage) {
     this.energy -= damage;
     if (this.energy < 0) this.energy = 0;
@@ -129,6 +148,10 @@ class Endboss extends MoveableObject {
     }, 500);
   }
 
+  /**
+   * Checks if endboss should die
+   * @returns {boolean} True if endboss has no energy left
+   */
   checkForDeath() {
     if (this.energy <= 0) {
       this.die();
@@ -137,6 +160,10 @@ class Endboss extends MoveableObject {
     return false;
   }
 
+  /**
+   * Starts the hit reaction animation
+   * @param {string} attackType - Type of attack
+   */
   startHitReaction(attackType) {
     this.isHit = true;
     this.isAttacking = false; 
@@ -148,6 +175,9 @@ class Endboss extends MoveableObject {
     }
   }
 
+  /**
+   * Applies effects when hit by a bottle
+   */
   applyBottleHitEffects() {
     audioManager.playSound('hit_by_bottle');
     audioManager.setVolume('hit_by_bottle', 0.3); 
@@ -158,6 +188,9 @@ class Endboss extends MoveableObject {
     }, 1000); 
   }
 
+  /**
+   * Applies effects when hit by a fin slap
+   */
   applySlapHitEffects() {
     audioManager.playSound('hit_by_fin_slap');
     audioManager.setVolume('hit_by_fin_slap', 0.3); 
@@ -168,6 +201,9 @@ class Endboss extends MoveableObject {
     }, 1000); 
   }
 
+  /**
+   * Initiates the death sequence
+   */
   die() {
     this.isDying = true;
     this.isHit = false;
@@ -176,6 +212,9 @@ class Endboss extends MoveableObject {
     this.deathAnimationIndex = 0;
   }
 
+  /**
+   * Checks if character is in attack range
+   */
   checkAttackRange() {
     const currentTime = new Date().getTime();
     const cooldownElapsed = currentTime - this.lastAttackTime > this.attackCooldown;
@@ -188,15 +227,24 @@ class Endboss extends MoveableObject {
     }
   }
 
+  /**
+   * Starts the attack animation
+   */
   startAttackAnimation() {
     this.isAttacking = true;
     this.currentAttackFrame = 0;
   }
 
+  /**
+   * Ends the attack animation
+   */
   endAttackAnimation() {
     this.isAttacking = false;
   }
 
+  /**
+   * Checks if character is close enough to trigger endboss appearance
+   */
   checkFirstContact() {
     if (world.character.x > 2000 && !this.hadFirstContact) {
       this.visible = true;
@@ -207,6 +255,9 @@ class Endboss extends MoveableObject {
     }
   }
 
+  /**
+   * Starts the endboss movement
+   */
   startMovementEndboss() {
     setStoppableInterval(() => {
       if (isGameActive && !this.isDying) {
@@ -215,6 +266,9 @@ class Endboss extends MoveableObject {
     }, 1000/60);
   }
 
+  /**
+   * Plays the appropriate animation based on current state
+   */
   playAnimations() {
     if (this.isDying) {
       this.playDeathAnimation();
@@ -236,6 +290,9 @@ class Endboss extends MoveableObject {
     if (this.animationStarted) this.animationFrame++;
   }
 
+  /**
+   * Plays the hit animation
+   */
   playHitAnimation() {
     let index = Math.min(Math.floor(this.hitAnimationTimer / 2), this.IMAGES_HIT.length - 1);
     this.img = this.imageCache[this.IMAGES_HIT[index]];
@@ -246,6 +303,9 @@ class Endboss extends MoveableObject {
     }
   }
 
+  /**
+   * Plays the death animation
+   */
   playDeathAnimation() {
     if (this.deathAnimationIndex < this.IMAGES_DEAD.length) {
       this.img = this.imageCache[this.IMAGES_DEAD[this.deathAnimationIndex]];
@@ -261,6 +321,10 @@ class Endboss extends MoveableObject {
     }
   }
 
+  /**
+   * Draws the endboss if visible
+   * @param {CanvasRenderingContext2D} ctx - The canvas context
+   */
   draw(ctx) {
     if (this.visible) {
       super.draw(ctx);

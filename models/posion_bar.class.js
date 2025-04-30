@@ -10,6 +10,9 @@ class PosionBar extends DrawableObject {
     './img/4.Marcadores/green/poisoned bubbles/100.png',
   ];
 
+  /**
+   * Creates a new poison bar at specified position
+   */
   constructor() {
     super();
     this.loadImages(this.IMAGES_POISON);
@@ -20,12 +23,20 @@ class PosionBar extends DrawableObject {
     this.setPercentage(0);
   }
 
+  /**
+   * Updates the poison bar display based on the percentage value
+   * @param {number} percentage - Poison percentage value (0-100)
+   */
   setPercentage(percentage) {
     this.percentage = percentage;
     let path = this.IMAGES_POISON[this.resolveImageIndex()];
     this.img = this.imageCache[path];
   }  
     
+  /**
+   * Determines which image to use based on current percentage
+   * @returns {number} Index of the image to display
+   */
   resolveImageIndex() {
     if (this.percentage >= 100) {
       return 5;

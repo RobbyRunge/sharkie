@@ -21,6 +21,9 @@ class OrangeFish extends DestructibleEnemy {
     './img/2.Enemy/1.Puffer_fish(3_color_options)/4.DIE/dead_fish_2_3.png',
   ];
 
+  /**
+   * Creates a new OrangeFish at a random position
+   */
   constructor() {
     super();
     this.loadImage(this.IMAGES_SWIMMING[0]);
@@ -37,10 +40,16 @@ class OrangeFish extends DestructibleEnemy {
     this.animate();
   }
 
+  /**
+   * Initializes animation for this fish
+   */
   animate() {
     this.startAnimation();
   }
 
+  /**
+   * Sets up animation intervals for swimming and death animations
+   */
   startAnimation() {
     setStoppableInterval(() => {
       if (isGameActive) {

@@ -21,6 +21,10 @@ class GreenFish extends DestructibleEnemy {
     'img/2.Enemy/1.Puffer_fish(3_color_options)/4.DIE/dead_fish_1_3.png',
   ];
 
+  /**
+   * Creates a new GreenFish enemy instance
+   * Sets initial position, loads images and starts animations
+   */
   constructor() {
     super();
     this.loadImage(this.IMAGES_SWIMMING[0]);
@@ -37,10 +41,17 @@ class GreenFish extends DestructibleEnemy {
     this.animate();
   }
 
+  /**
+   * Initializes the animation sequence for the fish
+   */
   animate() {
     this.startAnimation();
   }
 
+  /**
+   * Sets up interval-based animation for the fish
+   * Handles both normal swimming and death animations
+   */
   startAnimation() {
     setStoppableInterval(() => {
       if (isGameActive) {

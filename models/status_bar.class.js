@@ -10,6 +10,9 @@ class StatusBar extends DrawableObject {
     './img/4.Marcadores/green/Life/100.png' 
   ];
 
+  /**
+   * Creates a new status bar at specified position
+   */
   constructor() {
     super();
     this.loadImages(this.IMAGES_HEALTH);
@@ -20,12 +23,20 @@ class StatusBar extends DrawableObject {
     this.setPercentage(100);
   }
 
+  /**
+   * Updates the status bar display based on the percentage value
+   * @param {number} percentage - Health percentage value (0-100)
+   */
   setPercentage(percentage) {
     this.percentage = percentage;
     let path = this.IMAGES_HEALTH[this.resolveImageIndex()];
     this.img = this.imageCache[path];
   }  
     
+  /**
+   * Determines which image to use based on current percentage
+   * @returns {number} Index of the image to display
+   */
   resolveImageIndex() {
     if (this.percentage == 100) {
       return 5;

@@ -18,6 +18,10 @@ class GreenJellyFish extends DestructibleEnemy {
     './img/2.Enemy/2.Jelly_fish/Dead/green/g4.png',
   ];
 
+  /**
+   * Creates a new GreenJellyFish enemy instance
+   * Sets initial position, loads images and starts animations
+   */
   constructor() {
     super();
     this.loadImage(this.IMAGES_SWIMMING[0]);
@@ -34,10 +38,17 @@ class GreenJellyFish extends DestructibleEnemy {
     this.animate();
   }
 
+  /**
+   * Initializes the animation sequence for the jellyfish
+   */
   animate() {
     this.startAnimation();
   }
 
+  /**
+   * Sets up interval-based animation for the jellyfish
+   * Handles both normal swimming and death animations
+   */
   startAnimation() {
     setStoppableInterval(() => {
       if (isGameActive) {
