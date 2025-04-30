@@ -21,7 +21,7 @@ class PinkJellyFish extends DestructibleEnemy {
   constructor() {
     super();
     this.loadImage(this.IMAGES_SWIMMING[0]);
-    this.x = 200 + Math.random() * 2500;
+    this.x = 600 + Math.random() * 2500;
     this.y = 0 + Math.random() * 410;
     this.speed = 0.15 + Math.random() * 0.5;
     this.offsetLeft = 4;
