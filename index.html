@@ -87,48 +87,57 @@
     <div class="control_container d_none">
       <div class="img_movement">
         <img
+          id="arrow_left"
           src="img/assets/arrow_control.png" 
           class="control_button_design arrow_left" 
-          onmousedown="keyboard.LEFT = true" 
-          onmouseup="keyboard.LEFT = false" 
-          onmouseleave="keyboard.LEFT = false"
           ontouchstart="keyboard.LEFT = true" 
           ontouchend="keyboard.LEFT = false">
         
         <div class="keys_column">        
           <img
+            id="arrow_up"
             src="img/assets/arrow_control.png" 
             class="control_button_design" 
-            onmousedown="keyboard.UP = true" 
-            onmouseup="keyboard.UP = false" 
-            onmouseleave="keyboard.UP = false"
             ontouchstart="keyboard.UP = true" 
             ontouchend="keyboard.UP = false">
             
           <img 
+            id="arrow_down"
             src="img/assets/arrow_control.png"
             class="control_button_design arrow_down" 
-            onmousedown="keyboard.DOWN = true" 
-            onmouseup="keyboard.DOWN = false" 
-            onmouseleave="keyboard.DOWN = false"
             ontouchstart="keyboard.DOWN = true" 
             ontouchend="keyboard.DOWN = false">
         </div>
         
         <img
+          id="arrow_right"
           src="img/assets/arrow_control.png" 
           class="control_button_design arrow_right" 
-          onmousedown="keyboard.RIGHT = true" 
-          onmouseup="keyboard.RIGHT = false" 
-          onmouseleave="keyboard.RIGHT = false"
           ontouchstart="keyboard.RIGHT = true" 
           ontouchend="keyboard.RIGHT = false">
       </div>
 
       <div class="img_positiom_control_container">
-        <img src="./img/assets/speed.png" alt="speed boost" class="img_size_control" onclick="world.character.multiplySpeedByCollectCoins()">
-        <img src="./img/assets/posion.png" alt="throw posion" class="img_size_control" onclick="world.character.startShooting()">
-        <img src="./img/assets/shark.png" alt="fin slap" class="img_size_control" onclick="world.character.startSlapping()">
+        <img 
+          id="speed_boost" 
+          src="./img/assets/speed.png" 
+          alt="speed boost" 
+          class="img_size_control" 
+          onclick="world.character.multiplySpeedByCollectCoins()">
+        
+        <img 
+          id="throw_bottle" 
+          src="./img/assets/posion.png" 
+          alt="throw posion" 
+          class="img_size_control" 
+          onclick="world.character.startShooting()">
+        
+        <img 
+          id="fin_slap" 
+          src="./img/assets/shark.png" 
+          alt="fin slap" 
+          class="img_size_control" 
+          onclick="world.character.startSlapping()">
       </div>
     </div>
 

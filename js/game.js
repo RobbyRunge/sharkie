@@ -1,6 +1,6 @@
 let canvas; 
 let world; 
-let keyboard = new Keyboard();
+let keyboard;
 let intervalIds = []; 
 let isGameActive = true; 
 let audioManager; 
@@ -28,6 +28,7 @@ function init() {
   intervalIds = []; 
   isGameActive = true;
   audioManager = new AudioManager();
+  keyboard = new GameKeyboard();
   loadSounds();
   initLevel();
   canvas = document.getElementById("canvas");
