@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: models/character_animation.class.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: models/character_animation.class.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>class CharacterAnimation {
+  idleTime = 0;
+  isInSleepMode = false;
+  sleepCycleComplete = false;
+  currentSleepFrame = 0;
+  isHit = false;
+  hitTime = 0;
+  hitDuration = 300;
+  hitType = 'poison'; 
+  isSlapping = false;
+  currentSlapFrame = 0;
+  slapComplete = false;
+  isShooting = false;
+  currentShootingFrame = 0;
+  shootingTime = 0;
+  shootingDuration = 350;
+  shootingComplete = false;
+  canShoot = true;
+  shootingProcessed = false;
+  currentDeadFrame = 0;
+  deathAnimationComplete = false;
+  snoringTimeoutId = null;
+  isMovementSoundPlaying = false;
+  animationSpeed = {
+    swimming: 100,
+    standing: 150,
+    sleeping: 300,
+    hit: 100,
+    slapping: 70,
+    shooting: 50
+  };
+  lastAnimationUpdate = {
+    swimming: 0,
+    standing: 0,
+    sleeping: 0,
+    hit: 0,
+    slapping: 0,
+    shooting: 0
+  };
+  character;
+
+  IMAGES_STAND = [
+    './img/1.Sharkie/1.IDLE/1.png',
+    './img/1.Sharkie/1.IDLE/2.png',
+    './img/1.Sharkie/1.IDLE/3.png',
+    './img/1.Sharkie/1.IDLE/4.png',
+    './img/1.Sharkie/1.IDLE/5.png',
+    './img/1.Sharkie/1.IDLE/6.png',
+    './img/1.Sharkie/1.IDLE/7.png',
+    './img/1.Sharkie/1.IDLE/8.png',
+    './img/1.Sharkie/1.IDLE/9.png',
+    './img/1.Sharkie/1.IDLE/10.png',
+    './img/1.Sharkie/1.IDLE/11.png',
+    './img/1.Sharkie/1.IDLE/12.png',
+    './img/1.Sharkie/1.IDLE/13.png',
+    './img/1.Sharkie/1.IDLE/14.png',
+    './img/1.Sharkie/1.IDLE/15.png',
+    './img/1.Sharkie/1.IDLE/16.png',
+    './img/1.Sharkie/1.IDLE/17.png',
+    './img/1.Sharkie/1.IDLE/18.png'
+  ];
+
+  IMAGES_SWIMMING = [
+    './img/1.Sharkie/3.Swim/1.png',
+    './img/1.Sharkie/3.Swim/2.png',
+    './img/1.Sharkie/3.Swim/3.png',
+    './img/1.Sharkie/3.Swim/4.png',
+    './img/1.Sharkie/3.Swim/5.png',
+    './img/1.Sharkie/3.Swim/6.png'
+  ];
+
+  IMAGES_SLEEP = [
+    './img/1.Sharkie/2.Long_IDLE/i1.png',
+    './img/1.Sharkie/2.Long_IDLE/I2.png',
+    './img/1.Sharkie/2.Long_IDLE/I3.png',
+    './img/1.Sharkie/2.Long_IDLE/I4.png',
+    './img/1.Sharkie/2.Long_IDLE/I5.png',
+    './img/1.Sharkie/2.Long_IDLE/I6.png',
+    './img/1.Sharkie/2.Long_IDLE/I7.png',
+    './img/1.Sharkie/2.Long_IDLE/I8.png',
+    './img/1.Sharkie/2.Long_IDLE/I9.png',
+    './img/1.Sharkie/2.Long_IDLE/I10.png',
+    './img/1.Sharkie/2.Long_IDLE/I11.png',
+    './img/1.Sharkie/2.Long_IDLE/I12.png',
+    './img/1.Sharkie/2.Long_IDLE/I13.png',
+    './img/1.Sharkie/2.Long_IDLE/I14.png'
+  ];
+
+  IMAGES_HIT = [
+    './img/1.Sharkie/5.Hurt/1.Poisoned/1.png',
+    './img/1.Sharkie/5.Hurt/1.Poisoned/2.png',
+    './img/1.Sharkie/5.Hurt/1.Poisoned/3.png',
+    './img/1.Sharkie/5.Hurt/1.Poisoned/4.png',
+  ];
+
+  IMAGES_HIT_ELECTRIC = [
+    './img/1.Sharkie/5.Hurt/2.Electric shock/1.png',
+    './img/1.Sharkie/5.Hurt/2.Electric shock/2.png',
+    './img/1.Sharkie/5.Hurt/2.Electric shock/3.png',
+  ];
+
+  IMAGES_SHOOTING = [
+    'img/1.Sharkie/4.Attack/Bubble trap/For Whale/1.png',
+    'img/1.Sharkie/4.Attack/Bubble trap/For Whale/2.png',
+    'img/1.Sharkie/4.Attack/Bubble trap/For Whale/3.png',
+    'img/1.Sharkie/4.Attack/Bubble trap/For Whale/4.png',
+    'img/1.Sharkie/4.Attack/Bubble trap/For Whale/5.png',
+    'img/1.Sharkie/4.Attack/Bubble trap/For Whale/6.png',
+    'img/1.Sharkie/4.Attack/Bubble trap/For Whale/7.png',
+    'img/1.Sharkie/4.Attack/Bubble trap/For Whale/8.png',
+  ];
+
+  IMAGES_SLAP = [
+    'img/1.Sharkie/4.Attack/Fin slap/1.png',
+    'img/1.Sharkie/4.Attack/Fin slap/2.png',
+    'img/1.Sharkie/4.Attack/Fin slap/3.png',
+    'img/1.Sharkie/4.Attack/Fin slap/4.png',
+    'img/1.Sharkie/4.Attack/Fin slap/5.png',
+    'img/1.Sharkie/4.Attack/Fin slap/6.png',
+    'img/1.Sharkie/4.Attack/Fin slap/7.png',
+    'img/1.Sharkie/4.Attack/Fin slap/8.png',
+    'img/1.Sharkie/4.Attack/Fin slap/4.png',
+    'img/1.Sharkie/4.Attack/Fin slap/3.png',
+    'img/1.Sharkie/4.Attack/Fin slap/2.png',
+    'img/1.Sharkie/4.Attack/Fin slap/1.png',
+  ];
+
+  IMAGES_DEAD = [
+    './img/1.Sharkie/6.dead/1.Poisoned/1.png',
+    './img/1.Sharkie/6.dead/1.Poisoned/2.png',
+    './img/1.Sharkie/6.dead/1.Poisoned/3.png',
+    './img/1.Sharkie/6.dead/1.Poisoned/4.png',
+    './img/1.Sharkie/6.dead/1.Poisoned/5.png',
+    './img/1.Sharkie/6.dead/1.Poisoned/6.png',
+    './img/1.Sharkie/6.dead/1.Poisoned/7.png',
+    './img/1.Sharkie/6.dead/1.Poisoned/8.png',
+    './img/1.Sharkie/6.dead/1.Poisoned/9.png',
+    './img/1.Sharkie/6.dead/1.Poisoned/10.png',
+    './img/1.Sharkie/6.dead/1.Poisoned/11.png',
+    './img/1.Sharkie/6.dead/1.Poisoned/12.png',
+  ];
+
+  /**
+   * Creates a new character animation handler
+   * @param {Character} character - The character to animate
+   */
+  constructor(character) {
+    this.character = character;
+    this.loadAllImages();
+  }
+
+  /**
+   * Loads all character animation images
+   */
+  loadAllImages() {
+    this.character.loadImage(this.IMAGES_STAND[0]);
+    this.character.loadImages(this.IMAGES_STAND);
+    this.character.loadImages(this.IMAGES_SWIMMING);
+    this.character.loadImages(this.IMAGES_SLEEP);
+    this.character.loadImages(this.IMAGES_HIT);
+    this.character.loadImages(this.IMAGES_HIT_ELECTRIC);
+    this.character.loadImages(this.IMAGES_SHOOTING);
+    this.character.loadImages(this.IMAGES_SLAP);
+    this.character.loadImages(this.IMAGES_DEAD);
+  }
+
+  /**
+   * Sets up the animation system
+   */
+  animate() {
+    this.setupAnimationLoop();
+  }
+
+  /**
+   * Sets up the main animation loop
+   */
+  setupAnimationLoop() {
+    setStoppableInterval(() => {
+      if (!isGameActive) return;
+      const now = new Date().getTime();
+      if (this.character.isDead()) {
+        this.handleDeadAnimation();
+      } else if (this.isHit) {
+        this.handleHitAnimation(now);
+      } else if (this.isSlapping) {
+        this.handleSlapingAnimation(now);
+      } else if (this.isShooting) {
+        this.handleShootingAnimation(now);
+      } else if (this.character.isMoving()) {
+        this.handleMovementAnimation(now);
+      } else {
+        this.handleIdleAnimation(now);
+      }
+    }, 100);
+  }
+
+  /**
+   * Handles character death animation
+   */
+  handleDeadAnimation() {
+    if (this.currentDeadFrame &lt; this.IMAGES_DEAD.length) {
+      this.character.img = this.character.imageCache[this.IMAGES_DEAD[this.currentDeadFrame]];
+      this.currentDeadFrame++;
+    } else if (!this.deathAnimationComplete) {
+      closeFullscreen();
+      this.deathAnimationComplete = true;
+      this.character.world.stopGame();
+      this.character.world.showGameOverScreen();
+    }
+  }
+
+  /**
+   * Handles hit animation
+   * @param {number} now - Current timestamp
+   */
+  handleHitAnimation(now) {
+    if (now - this.lastAnimationUpdate.hit >= this.animationSpeed.hit) {
+      if (this.hitType === 'electric' &amp;&amp; this.isHit) {
+        audioManager.playSound('electric_shock', false);
+        audioManager.setVolume('electric_shock', 0.3);
+        this.playCharacterAnimation(this.IMAGES_HIT_ELECTRIC);
+      } else {
+        this.playCharacterAnimation(this.IMAGES_HIT);
+        audioManager.playSound('normal_damage', false);
+        audioManager.setVolume('normal_damage', 0.3);
+      }
+      this.lastAnimationUpdate.hit = now;
+      this.hitTime += 100;
+      if (this.hitTime >= this.hitDuration) {
+        if (this.hitType === 'electric') {
+          audioManager.stopSound('electric_shock');
+        }
+        this.isHit = false;
+        this.hitTime = 0;
+      }
+    }
+  }
+
+  /**
+   * Handles slap attack animation
+   * @param {number} now - Current timestamp
+   */
+  handleSlapingAnimation(now) {
+    if (this.shouldSkipSlapAnimationUpdate(now)) return;
+    this.updateSlapAnimationTimestamp(now);
+    this.advanceSlapFrame();
+    this.checkForSlapAnimationCompletion();
+  }
+
+  /**
+   * Determines if slap animation update should be skipped
+   * @param {number} now - Current timestamp
+   * @returns {boolean} True if update should be skipped
+   */
+  shouldSkipSlapAnimationUpdate(now) {
+    const timeElapsed = now - this.lastAnimationUpdate.slapping;
+    return timeElapsed &lt; this.animationSpeed.slapping;
+  }
+
+  /**
+   * Updates the timestamp for slap animation
+   * @param {number} now - Current timestamp
+   */
+  updateSlapAnimationTimestamp(now) {
+    this.lastAnimationUpdate.slapping = now;
+  }
+
+  /**
+   * Advances to the next frame in slap animation
+   */
+  advanceSlapFrame() {
+    if (this.currentSlapFrame &lt; this.IMAGES_SLAP.length) {
+      this.character.img = this.character.imageCache[this.IMAGES_SLAP[this.currentSlapFrame]];
+      this.currentSlapFrame++;
+    }
+  }
+
+  /**
+   * Checks if slap animation has completed
+   */
+  checkForSlapAnimationCompletion() {
+    if (this.currentSlapFrame >= this.IMAGES_SLAP.length) {
+      this.character.resetSlapState();
+    }
+  }
+
+  /**
+   * Handles shooting animation
+   * @param {number} now - Current timestamp
+   */
+  handleShootingAnimation(now) {
+    if (this.shouldSkipAnimationUpdate(now)) return;
+    this.updateAnimationTimestamp(now);
+    this.advanceShootingFrame();
+    this.trackAnimationProgress();
+    this.checkForAnimationCompletion();
+    this.checkForAnimationReset();
+  }
+  
+  /**
+   * Determines if animation update should be skipped
+   * @param {number} now - Current timestamp
+   * @returns {boolean} True if update should be skipped
+   */
+  shouldSkipAnimationUpdate(now) {
+    const timeElapsed = now - this.lastAnimationUpdate.shooting;
+    return timeElapsed &lt; this.animationSpeed.shooting;
+  }
+  
+  /**
+   * Updates the timestamp for the current animation
+   * @param {number} now - Current timestamp
+   */
+  updateAnimationTimestamp(now) {
+    this.lastAnimationUpdate.shooting = now;
+  }
+  
+  /**
+   * Advances to the next frame in shooting animation
+   */
+  advanceShootingFrame() {
+    if (this.currentShootingFrame &lt; this.IMAGES_SHOOTING.length) {
+      this.character.img = this.character.imageCache[this.IMAGES_SHOOTING[this.currentShootingFrame]];
+      this.currentShootingFrame++;
+    }
+  }
+  
+  /**
+   * Tracks animation progress
+   */
+  trackAnimationProgress() {
+    this.shootingTime += 100;
+  }
+  
+  /**
+   * Checks if animation has completed
+   */
+  checkForAnimationCompletion() {
+    if (this.currentShootingFrame >= this.IMAGES_SHOOTING.length - 1 &amp;&amp; !this.shootingComplete) {
+      this.shootingComplete = true;
+    }
+  }
+  
+  /**
+   * Checks if animation should be reset
+   */
+  checkForAnimationReset() {
+    if (this.currentShootingFrame >= this.IMAGES_SHOOTING.length) {
+      this.character.resetShootingState();
+    }
+  }
+
+  /**
+   * Handles swimming animation when character is moving
+   * @param {number} now - Current timestamp
+   */
+  handleMovementAnimation(now) {
+    if (!this.isMovementSoundPlaying) {
+      audioManager.playSound('movement', false);
+      audioManager.setVolume('movement', 0.1);
+      this.isMovementSoundPlaying = true;
+    }
+    
+    if (this.isInSleepMode) {
+      this.exitSleepMode();
+    }
+    this.idleTime = 0;
+    if (now - this.lastAnimationUpdate.swimming >= this.animationSpeed.swimming) {
+      this.playCharacterAnimation(this.IMAGES_SWIMMING);
+      this.lastAnimationUpdate.swimming = now;
+    }
+  }
+
+  /**
+   * Handles idle animation when character is not moving
+   * @param {number} now - Current timestamp
+   */
+  handleIdleAnimation(now) {
+    if (this.isMovementSoundPlaying) {
+      audioManager.stopSound('movement');
+      this.isMovementSoundPlaying = false;
+    }
+    
+    this.updateIdleState();
+    if (this.isInSleepMode) {
+      this.playSlowSleepAnimation(now);
+    } else {
+      this.playStandingAnimation(now);
+    }
+  }
+
+  /**
+   * Updates the idle state and sleep mode
+   */
+  updateIdleState() {
+    this.idleTime += 100;
+    if (this.idleTime > 5000 &amp;&amp; !this.isInSleepMode) {
+      this.isInSleepMode = true;
+      this.sleepCycleComplete = false;
+      this.currentSleepFrame = 0;
+      if (this.snoringTimeoutId) {
+        clearTimeout(this.snoringTimeoutId);
+      }
+      this.snoringTimeoutId = setTimeout(() => {
+        if (this.isInSleepMode) {
+          audioManager.playSound('snoring', false);
+          audioManager.setVolume('snoring', 0.05);
+        }
+      }, 3200);
+    }  
+  }
+
+  /**
+   * Exits sleep animation mode
+   */
+  exitSleepMode() {
+    if (this.isInSleepMode) {
+      this.isInSleepMode = false;
+      this.sleepCycleComplete = false;
+      this.currentSleepFrame = 0;
+      if (this.snoringTimeoutId) {
+        clearTimeout(this.snoringTimeoutId);
+        this.snoringTimeoutId = null;
+      }
+      audioManager.stopSound('snoring');
+    }
+  }
+
+  /**
+   * Plays the sleeping animation
+   * @param {number} now - Current timestamp
+   */
+  playSlowSleepAnimation(now) {
+    if (now - this.lastAnimationUpdate.sleeping >= this.animationSpeed.sleeping) {
+      this.lastAnimationUpdate.sleeping = now;
+      if (!this.sleepCycleComplete) {
+        this.playInitialSleepAnimation();
+      } else {
+        this.playLoopingSleepAnimation();
+      }
+    }
+  }
+  
+  /**
+   * Plays the initial part of sleep animation sequence
+   */
+  playInitialSleepAnimation() {
+    this.character.img = this.character.imageCache[this.IMAGES_SLEEP[this.currentSleepFrame]];
+    this.currentSleepFrame++;
+    if (this.currentSleepFrame >= this.IMAGES_SLEEP.length) {
+      this.sleepCycleComplete = true;
+      this.currentSleepFrame = 10;
+    }
+  }
+  
+  /**
+   * Plays the looping part of sleep animation
+   */
+  playLoopingSleepAnimation() {
+    this.character.img = this.character.imageCache[this.IMAGES_SLEEP[this.currentSleepFrame]];
+    this.currentSleepFrame++; 
+    if (this.currentSleepFrame > 13) {
+      this.currentSleepFrame = 10;
+    }
+  }
+
+  /**
+   * Plays the standing idle animation
+   * @param {number} now - Current timestamp
+   */
+  playStandingAnimation(now) {
+    if (now - this.lastAnimationUpdate.standing >= this.animationSpeed.standing) {
+      this.playCharacterAnimation(this.IMAGES_STAND);
+      this.lastAnimationUpdate.standing = now;
+    }
+  }
+
+  /**
+   * Plays a character animation from image array
+   * @param {string[]} images - Array of image paths
+   */
+  playCharacterAnimation(images) {
+    if (!isGameActive || !images || !images.length) return;
+    let index = this.character.currentImage % images.length;
+    let path = images[index];
+    this.character.img = this.character.imageCache[path];
+    this.character.currentImage++;
+  }
+}
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="BackgroundObject.html">BackgroundObject</a></li><li><a href="Character.html">Character</a></li><li><a href="CharacterAnimation.html">CharacterAnimation</a></li><li><a href="Coin.html">Coin</a></li><li><a href="CoinBar.html">CoinBar</a></li><li><a href="Endboss.html">Endboss</a></li><li><a href="GameKeyboard.html">GameKeyboard</a></li><li><a href="GreenFish.html">GreenFish</a></li><li><a href="GreenJellyFish.html">GreenJellyFish</a></li><li><a href="Level.html">Level</a></li><li><a href="LilaJellyFish.html">LilaJellyFish</a></li><li><a href="OrangeFish.html">OrangeFish</a></li><li><a href="PinkJellyFish.html">PinkJellyFish</a></li><li><a href="Posion.html">Posion</a></li><li><a href="PosionBar.html">PosionBar</a></li><li><a href="RedFish.html">RedFish</a></li><li><a href="StatusBar.html">StatusBar</a></li><li><a href="ThrowableObject.html">ThrowableObject</a></li><li><a href="World.html">World</a></li><li><a href="YellowJellyFish.html">YellowJellyFish</a></li></ul><h3>Global</h3><ul><li><a href="global.html#checkOrientation">checkOrientation</a></li><li><a href="global.html#closeFullscreen">closeFullscreen</a></li><li><a href="global.html#closeOverlay">closeOverlay</a></li><li><a href="global.html#getGameOverTemplate">getGameOverTemplate</a></li><li><a href="global.html#getWinTemplate">getWinTemplate</a></li><li><a href="global.html#goBackToStartscreen">goBackToStartscreen</a></li><li><a href="global.html#handleBackgroundClick">handleBackgroundClick</a></li><li><a href="global.html#handleFullscreen">handleFullscreen</a></li><li><a href="global.html#hideAllContentOverlays">hideAllContentOverlays</a></li><li><a href="global.html#hideBackgroundOverlay">hideBackgroundOverlay</a></li><li><a href="global.html#hideCloseButton">hideCloseButton</a></li><li><a href="global.html#init">init</a></li><li><a href="global.html#initLevel">initLevel</a></li><li><a href="global.html#loadSounds">loadSounds</a></li><li><a href="global.html#openFullscreen">openFullscreen</a></li><li><a href="global.html#openOverlay">openOverlay</a></li><li><a href="global.html#removeClassesAfterAnimation">removeClassesAfterAnimation</a></li><li><a href="global.html#resetWorldState">resetWorldState</a></li><li><a href="global.html#setStoppableInterval">setStoppableInterval</a></li><li><a href="global.html#showBackgroundOverlay">showBackgroundOverlay</a></li><li><a href="global.html#showCloseButton">showCloseButton</a></li><li><a href="global.html#showSpecificOverlay">showSpecificOverlay</a></li><li><a href="global.html#startGame">startGame</a></li><li><a href="global.html#toggleSound">toggleSound</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.4</a> on Wed Apr 30 2025 22:05:31 GMT+0200 (Mitteleuropäische Sommerzeit)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

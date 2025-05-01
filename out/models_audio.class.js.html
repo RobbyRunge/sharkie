@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: models/audio.class.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: models/audio.class.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>class AudioManager {
+  constructor() {
+    this.sounds = {};
+    this.playingSounds = {};
+    this.backgroundMusic = null;
+    this.isMuted = false;
+  }
+
+  /**
+   * Loads an audio file into the sounds collection
+   * @param {string} name - The identifier for the sound
+   * @param {string} path - The file path to the audio file
+   */
+  loadSound(name, path) {
+    this.sounds[name] = new Audio(path);
+  }
+
+  /**
+   * Plays a sound from the sounds collection
+   * @param {string} name - The identifier for the sound to play
+   * @param {boolean} allowOverlap - Whether to allow the same sound to overlap (default: true)
+   */
+  playSound(name, allowOverlap = true) {
+    if (this.isMuted) return;
+    if (this.sounds[name]) {
+      if (allowOverlap) {
+        const sound = this.sounds[name].cloneNode();
+        sound.play();
+      } else {
+        this.stopSound(name);
+        this.playingSounds[name] = this.sounds[name];
+        this.sounds[name].play();
+      }
+    }
+  }
+
+  /**
+   * Stops a specific sound that is playing
+   * @param {string} name - The identifier for the sound to stop
+   */
+  stopSound(name) {
+    if (this.sounds[name]) {
+      this.sounds[name].pause();
+      this.sounds[name].currentTime = 0;
+    }
+    if (this.playingSounds[name]) {
+      this.playingSounds[name].pause();
+      this.playingSounds[name].currentTime = 0;
+      delete this.playingSounds[name];
+    }
+  }
+
+  /**
+   * Stops all sounds that are currently playing
+   */
+  stopAllSounds() {
+    for (let sound in this.sounds) {
+      this.sounds[sound].pause();
+      this.sounds[sound].currentTime = 0;
+    }
+    for (let sound in this.playingSounds) {
+      this.playingSounds[sound].pause();
+      this.playingSounds[sound].currentTime = 0;
+    }
+    this.playingSounds = {};
+  }
+
+  /**
+   * Plays a sound as background music
+   * @param {string} name - The identifier for the sound to use as background music
+   * @param {boolean} loop - Whether the music should loop (default: true)
+   */
+  playBackgroundMusic(name, loop = true) {
+    if (this.backgroundMusic) {
+      this.backgroundMusic.pause();
+    }
+    if (this.sounds[name]) {
+      this.backgroundMusic = this.sounds[name];
+      this.backgroundMusic.loop = loop;
+      this.backgroundMusic.play();
+    }
+  }
+
+  /**
+   * Sets the volume level for a specific sound
+   * @param {string} name - The identifier for the sound
+   * @param {number} volume - The volume level (0.0 to 1.0)
+   */
+  setVolume(name, volume) {
+    if (this.sounds[name]) {
+      this.sounds[name].volume = volume;
+    }
+    if (this.playingSounds[name]) {
+      this.playingSounds[name].volume = volume;
+    }
+  }
+
+  /**
+   * Toggles mute state for all sounds
+   * @returns {boolean} The current mute state after toggling
+   */
+  toggleMute() {
+    this.isMuted = !this.isMuted;
+    if (this.backgroundMusic) {
+      if (this.isMuted) {
+        this.backgroundMusic.pause();
+      } else {
+        this.backgroundMusic.play();
+      }
+    }
+    for (let sound in this.playingSounds) {
+      if (this.isMuted) {
+        this.playingSounds[sound].pause();
+      } else {
+        this.playingSounds[sound].play();
+      }
+    }
+    return this.isMuted;
+  }
+}</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="BackgroundObject.html">BackgroundObject</a></li><li><a href="Character.html">Character</a></li><li><a href="CharacterAnimation.html">CharacterAnimation</a></li><li><a href="Coin.html">Coin</a></li><li><a href="CoinBar.html">CoinBar</a></li><li><a href="Endboss.html">Endboss</a></li><li><a href="GameKeyboard.html">GameKeyboard</a></li><li><a href="GreenFish.html">GreenFish</a></li><li><a href="GreenJellyFish.html">GreenJellyFish</a></li><li><a href="Level.html">Level</a></li><li><a href="LilaJellyFish.html">LilaJellyFish</a></li><li><a href="OrangeFish.html">OrangeFish</a></li><li><a href="PinkJellyFish.html">PinkJellyFish</a></li><li><a href="Posion.html">Posion</a></li><li><a href="PosionBar.html">PosionBar</a></li><li><a href="RedFish.html">RedFish</a></li><li><a href="StatusBar.html">StatusBar</a></li><li><a href="ThrowableObject.html">ThrowableObject</a></li><li><a href="World.html">World</a></li><li><a href="YellowJellyFish.html">YellowJellyFish</a></li></ul><h3>Global</h3><ul><li><a href="global.html#checkOrientation">checkOrientation</a></li><li><a href="global.html#closeFullscreen">closeFullscreen</a></li><li><a href="global.html#closeOverlay">closeOverlay</a></li><li><a href="global.html#getGameOverTemplate">getGameOverTemplate</a></li><li><a href="global.html#getWinTemplate">getWinTemplate</a></li><li><a href="global.html#goBackToStartscreen">goBackToStartscreen</a></li><li><a href="global.html#handleBackgroundClick">handleBackgroundClick</a></li><li><a href="global.html#handleFullscreen">handleFullscreen</a></li><li><a href="global.html#hideAllContentOverlays">hideAllContentOverlays</a></li><li><a href="global.html#hideBackgroundOverlay">hideBackgroundOverlay</a></li><li><a href="global.html#hideCloseButton">hideCloseButton</a></li><li><a href="global.html#init">init</a></li><li><a href="global.html#initLevel">initLevel</a></li><li><a href="global.html#loadSounds">loadSounds</a></li><li><a href="global.html#openFullscreen">openFullscreen</a></li><li><a href="global.html#openOverlay">openOverlay</a></li><li><a href="global.html#removeClassesAfterAnimation">removeClassesAfterAnimation</a></li><li><a href="global.html#resetWorldState">resetWorldState</a></li><li><a href="global.html#setStoppableInterval">setStoppableInterval</a></li><li><a href="global.html#showBackgroundOverlay">showBackgroundOverlay</a></li><li><a href="global.html#showCloseButton">showCloseButton</a></li><li><a href="global.html#showSpecificOverlay">showSpecificOverlay</a></li><li><a href="global.html#startGame">startGame</a></li><li><a href="global.html#toggleSound">toggleSound</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.4</a> on Wed Apr 30 2025 22:05:31 GMT+0200 (Mitteleuropäische Sommerzeit)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
