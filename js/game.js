@@ -45,6 +45,7 @@ function init() {
   keyboard = new GameKeyboard();
   loadSounds();
   initLevel();
+  handleFullscreen();
   canvas = document.getElementById("canvas");
   world = new World(canvas, keyboard);
   updateSoundIconDisplay();
@@ -121,7 +122,7 @@ function toggleSound() {
  */
 function handleFullscreen() {
   const canvas = document.getElementById('game_container');
-  if (!document.fullscreenElement) {
+  if (!document.fullscreenElement && window.innerWidth < 1300) {
     openFullscreen(canvas);
   } else {
     closeFullscreen();
