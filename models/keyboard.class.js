@@ -31,7 +31,6 @@ class GameKeyboard {
       e.preventDefault();
       this.LEFT = true;
     });
-
     document.getElementById('arrow_left').addEventListener('touchend', (e) => {
       e.preventDefault();
       this.LEFT = false;
@@ -41,7 +40,6 @@ class GameKeyboard {
       e.preventDefault();
       this.UP = true;
     });
-
     document.getElementById('arrow_up').addEventListener('touchend', (e) => {
       e.preventDefault();
       this.UP = false;
@@ -51,7 +49,6 @@ class GameKeyboard {
       e.preventDefault();
       this.DOWN = true;
     });
-
     document.getElementById('arrow_down').addEventListener('touchend', (e) => {
       e.preventDefault();
       this.DOWN = false;
@@ -61,7 +58,6 @@ class GameKeyboard {
       e.preventDefault();
       this.RIGHT = true;
     });
-
     document.getElementById('arrow_right').addEventListener('touchend', (e) => {
       e.preventDefault();
       this.RIGHT = false;
@@ -71,7 +67,6 @@ class GameKeyboard {
       e.preventDefault();
       this.E = true;
     });
-
     document.getElementById('speed_boost').addEventListener('touchend', (e) => {
       e.preventDefault();
       this.E = false;
@@ -81,7 +76,6 @@ class GameKeyboard {
       e.preventDefault();
       this.D = true;
     });
-
     document.getElementById('throw_bottle').addEventListener('touchend', (e) => {
       e.preventDefault();
       this.D = false;
@@ -91,7 +85,6 @@ class GameKeyboard {
       e.preventDefault();
       this.SPACE = true;
     });
-
     document.getElementById('fin_slap').addEventListener('touchend', (e) => {
       e.preventDefault();
       this.SPACE = false;
