@@ -141,3 +141,37 @@ function closeFullscreen() {
     }
   }
 }
+
+/**
+ * Shows the game over screen
+ */
+function showGameOverScreen() {
+  audioManager.playSound('game_over');
+  audioManager.setVolume('game_over', 0.3);
+  document.body.insertAdjacentHTML('beforeend', getGameOverTemplate());
+  document.getElementById('retry_button').addEventListener('click', () => {
+    document.getElementById('game_over_screen').remove();
+    init();
+  });
+  document.getElementById('menu_button').addEventListener('click', () => {
+    document.getElementById('game_over_screen').remove();
+    goBackToStartscreen();
+  });
+}
+
+/**
+ * Shows the win screen when player completes the game
+ */
+function showWinScreen() {
+  audioManager.playSound('win');
+  audioManager.setVolume('win', 0.3);
+  document.body.insertAdjacentHTML('beforeend', getWinTemplate());
+  document.getElementById('play_again_button').addEventListener('click', () => {
+    document.getElementById('win_screen').remove();
+    init();
+  });
+  document.getElementById('win_menu_button').addEventListener('click', () => {
+    document.getElementById('win_screen').remove();
+    goBackToStartscreen();
+  });
+}

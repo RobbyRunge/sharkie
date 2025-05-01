@@ -205,7 +205,7 @@ class CharacterAnimation {
       closeFullscreen();
       this.deathAnimationComplete = true;
       this.character.world.stopGame();
-      this.character.world.showGameOverScreen();
+      showGameOverScreen();
     }
   }
 

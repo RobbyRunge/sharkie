@@ -317,7 +317,7 @@ class Endboss extends MoveableObject {
       closeFullscreen(); 
       world.stopGame();
       world.gameWon = true;
-      world.showWinScreen();
+      showWinScreen();
     }
   }
 
