@@ -57,6 +57,9 @@ class CharacterAnimation {
     this.character = character;
     this.initImageArrays();
     this.loadAllImages();
+    this.sleepHandler = new SleepAnimationHandler(this);
+    this.shootingHandler = new ShootingAnimationHandler(this);
+    this.hitHandler = new HitAnimationHandler(this);
   }
 
   /**
@@ -102,20 +105,64 @@ class CharacterAnimation {
     setStoppableInterval(() => {
       if (!isGameActive) return;
       const now = new Date().getTime();
-      if (this.character.isDead()) {
-        this.handleDeadAnimation();
-      } else if (this.isHit) {
-        this.handleHitAnimation(now);
-      } else if (this.isSlapping) {
-        this.handleSlapingAnimation(now);
-      } else if (this.isShooting) {
-        this.handleShootingAnimation(now);
-      } else if (this.character.isMoving()) {
-        this.handleMovementAnimation(now);
-      } else {
-        this.handleIdleAnimation(now);
-      }
+      const wasHit = this.isHit; 
+      this.determineAndPlayAnimation(now, wasHit);
     }, 100);
+  }
+
+  /**
+   * Determines the current animation state and plays the appropriate animation
+   * @param {number} now - Current timestamp
+   * @param {boolean} wasHit - Whether the character was in hit state
+   */
+  determineAndPlayAnimation(now, wasHit) {
+    if (this.character.isDead()) {
+      this.handleDeathState(wasHit);
+    } else if (this.isHit) {
+      this.handleHitAnimation(now);
+    } else {
+      this.handleNormalState(now, wasHit);
+    }
+  }
+
+  /**
+   * Handles the character's death state
+   * @param {boolean} wasHit - Whether character was previously hit
+   */
+  handleDeathState(wasHit) {
+    if (wasHit) {
+      this.stopHitSounds();
+    }
+    this.handleDeadAnimation();
+  }
+
+  /**
+   * Handles normal (non-hit, non-dead) animation states
+   * @param {number} now - Current timestamp
+   * @param {boolean} wasHit - Whether character was previously hit
+   */
+  handleNormalState(now, wasHit) {
+    if (wasHit) {
+      this.stopHitSounds();
+    }
+    if (this.isSlapping) {
+      this.handleSlapingAnimation(now);
+    } else if (this.isShooting) {
+      this.handleShootingAnimation(now);
+    } else if (this.character.isMoving()) {
+      this.handleMovementAnimation(now);
+    } else {
+      this.handleIdleAnimation(now);
+    }
+  }
+
+  /**
+   * Helper method to stop any active hit sounds
+   */
+  stopHitSounds() {
+    audioManager.stopSound('electric_shock');
+    audioManager.stopSound('normal_damage');
+    this.hitTime = 0;
   }
 
   /**
@@ -138,26 +185,7 @@ class CharacterAnimation {
    * @param {number} now - Current timestamp
    */
   handleHitAnimation(now) {
-    if (now - this.lastAnimationUpdate.hit >= this.animationSpeed.hit) {
-      if (this.hitType === 'electric' && this.isHit) {
-        audioManager.playSound('electric_shock', false);
-        audioManager.setVolume('electric_shock', 0.3);
-        this.playCharacterAnimation(this.IMAGES_HIT_ELECTRIC);
-      } else {
-        this.playCharacterAnimation(this.IMAGES_HIT);
-        audioManager.playSound('normal_damage', false);
-        audioManager.setVolume('normal_damage', 0.3);
-      }
-      this.lastAnimationUpdate.hit = now;
-      this.hitTime += 100;
-      if (this.hitTime >= this.hitDuration) {
-        if (this.hitType === 'electric') {
-          audioManager.stopSound('electric_shock');
-        }
-        this.isHit = false;
-        this.hitTime = 0;
-      }
-    }
+    this.hitHandler.handleHitAnimation(now);
   }
 
   /**
@@ -213,65 +241,7 @@ class CharacterAnimation {
    * @param {number} now - Current timestamp
    */
   handleShootingAnimation(now) {
-    if (this.shouldSkipAnimationUpdate(now)) return;
-    this.updateAnimationTimestamp(now);
-    this.advanceShootingFrame();
-    this.trackAnimationProgress();
-    this.checkForAnimationCompletion();
-    this.checkForAnimationReset();
-  }
-  
-  /**
-   * Determines if animation update should be skipped
-   * @param {number} now - Current timestamp
-   * @returns {boolean} True if update should be skipped
-   */
-  shouldSkipAnimationUpdate(now) {
-    const timeElapsed = now - this.lastAnimationUpdate.shooting;
-    return timeElapsed < this.animationSpeed.shooting;
-  }
-  
-  /**
-   * Updates the timestamp for the current animation
-   * @param {number} now - Current timestamp
-   */
-  updateAnimationTimestamp(now) {
-    this.lastAnimationUpdate.shooting = now;
-  }
-  
-  /**
-   * Advances to the next frame in shooting animation
-   */
-  advanceShootingFrame() {
-    if (this.currentShootingFrame < this.IMAGES_SHOOTING.length) {
-      this.character.img = this.character.imageCache[this.IMAGES_SHOOTING[this.currentShootingFrame]];
-      this.currentShootingFrame++;
-    }
-  }
-  
-  /**
-   * Tracks animation progress
-   */
-  trackAnimationProgress() {
-    this.shootingTime += 100;
-  }
-  
-  /**
-   * Checks if animation has completed
-   */
-  checkForAnimationCompletion() {
-    if (this.currentShootingFrame >= this.IMAGES_SHOOTING.length - 1 && !this.shootingComplete) {
-      this.shootingComplete = true;
-    }
-  }
-  
-  /**
-   * Checks if animation should be reset
-   */
-  checkForAnimationReset() {
-    if (this.currentShootingFrame >= this.IMAGES_SHOOTING.length) {
-      this.character.resetShootingState();
-    }
+    this.shootingHandler.handleShootingAnimation(now);
   }
 
   /**
@@ -304,34 +274,12 @@ class CharacterAnimation {
       audioManager.stopSound('movement');
       this.isMovementSoundPlaying = false;
     }
-    
-    this.updateIdleState();
-    if (this.isInSleepMode) {
-      this.playSlowSleepAnimation(now);
+    this.sleepHandler.updateIdleState();
+    if (this.sleepHandler.getIsInSleepMode()) {
+      this.sleepHandler.playSlowSleepAnimation(now);
     } else {
       this.playStandingAnimation(now);
     }
-  }
-
-  /**
-   * Updates the idle state and sleep mode
-   */
-  updateIdleState() {
-    this.idleTime += 100;
-    if (this.idleTime > 5000 && !this.isInSleepMode) {
-      this.isInSleepMode = true;
-      this.sleepCycleComplete = false;
-      this.currentSleepFrame = 0;
-      if (this.snoringTimeoutId) {
-        clearTimeout(this.snoringTimeoutId);
-      }
-      this.snoringTimeoutId = setTimeout(() => {
-        if (this.isInSleepMode) {
-          audioManager.playSound('snoring', false);
-          audioManager.setVolume('snoring', 0.05);
-        }
-      }, 3200);
-    }  
   }
 
   /**
@@ -347,44 +295,6 @@ class CharacterAnimation {
         this.snoringTimeoutId = null;
       }
       audioManager.stopSound('snoring');
-    }
-  }
-
-  /**
-   * Plays the sleeping animation
-   * @param {number} now - Current timestamp
-   */
-  playSlowSleepAnimation(now) {
-    if (now - this.lastAnimationUpdate.sleeping >= this.animationSpeed.sleeping) {
-      this.lastAnimationUpdate.sleeping = now;
-      if (!this.sleepCycleComplete) {
-        this.playInitialSleepAnimation();
-      } else {
-        this.playLoopingSleepAnimation();
-      }
-    }
-  }
-  
-  /**
-   * Plays the initial part of sleep animation sequence
-   */
-  playInitialSleepAnimation() {
-    this.character.img = this.character.imageCache[this.IMAGES_SLEEP[this.currentSleepFrame]];
-    this.currentSleepFrame++;
-    if (this.currentSleepFrame >= this.IMAGES_SLEEP.length) {
-      this.sleepCycleComplete = true;
-      this.currentSleepFrame = 10;
-    }
-  }
-  
-  /**
-   * Plays the looping part of sleep animation
-   */
-  playLoopingSleepAnimation() {
-    this.character.img = this.character.imageCache[this.IMAGES_SLEEP[this.currentSleepFrame]];
-    this.currentSleepFrame++; 
-    if (this.currentSleepFrame > 13) {
-      this.currentSleepFrame = 10;
     }
   }
 

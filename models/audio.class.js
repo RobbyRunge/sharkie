@@ -2,6 +2,7 @@ class AudioManager {
   constructor() {
     this.sounds = {};
     this.playingSounds = {};
+    this.audioPromises = {};  // Add this to track promises
     this.backgroundMusic = null;
     this.currentBackgroundTrack = this.loadBackgroundTrackFromStorage();
     this.isMuted = this.loadMuteStateFromStorage();
@@ -20,50 +21,70 @@ class AudioManager {
    * Plays a sound from the sounds collection
    * @param {string} name - The identifier for the sound to play
    * @param {boolean} allowOverlap - Whether to allow the same sound to overlap (default: true)
+   * @returns {Promise} A promise that resolves when the sound starts playing
    */
   playSound(name, allowOverlap = true) {
-    if (this.isMuted) return;
+    if (this.isMuted) return Promise.resolve();
     if (this.sounds[name]) {
       if (allowOverlap) {
         const sound = this.sounds[name].cloneNode();
-        sound.play();
+        const playPromise = sound.play();    
+        if (playPromise !== undefined) {
+          return playPromise.catch(error => {
+          });
+        }
+        return Promise.resolve();
       } else {
-        this.stopSound(name);
-        this.playingSounds[name] = this.sounds[name];
-        this.sounds[name].play();
+        return this.stopSound(name).then(() => {
+          this.playingSounds[name] = this.sounds[name];
+          const playPromise = this.sounds[name].play();
+          
+          if (playPromise !== undefined) {
+            this.audioPromises[name] = playPromise;
+            return playPromise.catch(error => {
+              delete this.audioPromises[name];
+            });
+          }
+          return Promise.resolve();
+        });
       }
     }
+    return Promise.resolve();
   }
 
   /**
    * Stops a specific sound that is playing
    * @param {string} name - The identifier for the sound to stop
+   * @returns {Promise} A promise that resolves when it's safe to manipulate the audio
    */
   stopSound(name) {
     if (this.sounds[name]) {
-      this.sounds[name].pause();
-      this.sounds[name].currentTime = 0;
+      const sound = this.sounds[name];
+      sound.pause();
+      sound.currentTime = 0;
+      const soundElements = document.querySelectorAll(`audio[data-sound="${name}"]`);
+      soundElements.forEach(element => {
+        element.pause();
+        element.currentTime = 0;
+      });
+      return Promise.resolve();
     }
-    if (this.playingSounds[name]) {
-      this.playingSounds[name].pause();
-      this.playingSounds[name].currentTime = 0;
-      delete this.playingSounds[name];
-    }
+    return Promise.resolve();
   }
 
   /**
    * Stops all sounds that are currently playing
    */
   stopAllSounds() {
+    const promises = [];
     for (let sound in this.sounds) {
-      this.sounds[sound].pause();
-      this.sounds[sound].currentTime = 0;
+      promises.push(this.stopSound(sound));
     }
     for (let sound in this.playingSounds) {
-      this.playingSounds[sound].pause();
-      this.playingSounds[sound].currentTime = 0;
+      promises.push(this.stopSound(sound));
     }
     this.playingSounds = {};
+    return Promise.all(promises);
   }
 
   /**
