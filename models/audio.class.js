@@ -3,6 +3,7 @@ class AudioManager {
     this.sounds = {};
     this.playingSounds = {};
     this.backgroundMusic = null;
+    this.currentBackgroundTrack = this.loadBackgroundTrackFromStorage();
     this.isMuted = this.loadMuteStateFromStorage();
   }
 
@@ -77,7 +78,12 @@ class AudioManager {
     if (this.sounds[name]) {
       this.backgroundMusic = this.sounds[name];
       this.backgroundMusic.loop = loop;
-      this.backgroundMusic.play();
+      if (!this.isMuted) {
+        this.backgroundMusic.play();
+      }
+      // Save current background track to localStorage
+      this.currentBackgroundTrack = name;
+      this.saveBackgroundTrackToStorage();
     }
   }
 
@@ -106,11 +112,30 @@ class AudioManager {
   }
 
   /**
+   * Loads the background track name from localStorage
+   * @returns {string|null} The saved background track name or null if not found
+   * @private
+   */
+  loadBackgroundTrackFromStorage() {
+    return localStorage.getItem('sharkie_background_track');
+  }
+
+  /**
    * Saves the current mute state to localStorage
    * @private
    */
   saveMuteStateToStorage() {
     localStorage.setItem('sharkie_muted', this.isMuted);
+  }
+
+  /**
+   * Saves the current background track name to localStorage
+   * @private
+   */
+  saveBackgroundTrackToStorage() {
+    if (this.currentBackgroundTrack) {
+      localStorage.setItem('sharkie_background_track', this.currentBackgroundTrack);
+    }
   }
 
   /**
@@ -150,6 +175,17 @@ class AudioManager {
       } else {
         this.playingSounds[sound].play();
       }
+    }
+  }
+
+  /**
+   * Resumes background music from saved state
+   * Should be called after loading sounds
+   */
+  resumeBackgroundMusic() {
+    if (this.currentBackgroundTrack && this.sounds[this.currentBackgroundTrack]) {
+      this.setVolume(this.currentBackgroundTrack, 0.3);
+      this.playBackgroundMusic(this.currentBackgroundTrack);
     }
   }
 }

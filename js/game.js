@@ -72,8 +72,12 @@ function updateSoundIconDisplay() {
  */
 function loadSounds() {
   audioManager.loadSound('background', 'audio/background_sound.mp3');
-  audioManager.setVolume('background', 0.3);
-  audioManager.playBackgroundMusic('background');
+  if (audioManager.currentBackgroundTrack) {
+    audioManager.resumeBackgroundMusic();
+  } else {
+    audioManager.setVolume('background', 0.3);
+    audioManager.playBackgroundMusic('background');
+  }
   audioManager.loadSound('game_over', 'audio/lose_sound.mp3');
   audioManager.loadSound('win', 'audio/win_sound.mp3');
   audioManager.loadSound('snoring', 'audio/snoring_sound.mp3');
