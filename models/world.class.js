@@ -5,52 +5,48 @@ class World {
   ctx; 
   keyboard; 
   camera_x = 0; 
-  statusBar =  new StatusBar();
+  statusBar = new StatusBar();
   coinBar = new CoinBar();
   posionBar = new PosionBar();
   throwableObject = [];
-  SLAP_RANGE = 30; 
-
-  /**
-   * Creates a new World instance
-   * @param {HTMLCanvasElement} canvas - The canvas element to render the game
-   * @param {GameKeyboard} keyboard - The keyboard control handler
-   */
+  
   constructor(canvas, keyboard) {
     this.ctx = canvas.getContext("2d");
     this.canvas = canvas;
     this.keyboard = keyboard;
-    this.draw();
+    this.collisionHandler = new CollisionHandler(this);
+    this.renderer = new GameRenderer(this);
     this.setWorld();
     this.run();
     this.updatePoisonBar();
     this.updateCoinBar(); 
+    this.renderer.draw();
   }
 
   /**
-   * Sets the world reference in the character
+   * Sets up the world reference in the character
    */
   setWorld() {
     this.character.world = this;
   }
 
   /**
-   * Initializes the game loop with collision detection and other checks
+   * Runs the main game loop with periodic checks
    */
   run() {
     setStoppableInterval(() => {
-      this.checkCollisions();
+      this.collisionHandler.checkCollisions();
       this.checkThrowObjects();
       this.checkSlapping();
-      this.checkThrowableCollisions(); 
-      this.checkSlapCollisions();
+      this.collisionHandler.checkThrowableCollisions(); 
+      this.collisionHandler.checkSlapCollisions();
       this.checkSpeedBoost();
       this.cleanupDeadFish();
     }, 100);
   }
 
   /**
-   * Checks if the player is performing a slap action
+   * Checks if the slap action should be triggered
    */
   checkSlapping() {
     if (this.keyboard.SPACE) {
@@ -59,7 +55,7 @@ class World {
   }
 
   /**
-   * Checks if the player is shooting objects
+   * Handles all throwable object logic
    */
   checkThrowObjects() {
     this.checkStartShooting();
@@ -67,7 +63,7 @@ class World {
   }
   
   /**
-   * Checks if the player has started shooting
+   * Checks if the character should start the shooting animation
    */
   checkStartShooting() {
     if (this.keyboard.D && this.character.startShooting()) {
@@ -75,7 +71,7 @@ class World {
   }
   
   /**
-   * Checks if a new projectile can be created and creates it if possible
+   * Checks if a projectile should be created based on animation state
    */
   checkCreateProjectile() {
     const canCreateProjectile = 
@@ -90,7 +86,7 @@ class World {
   }
   
   /**
-   * Creates and adds a new projectile to the game world
+   * Creates and adds a new throwable object to the game
    */
   createAndAddProjectile() {
     const projectileX = this.character.x + 100;
@@ -100,124 +96,7 @@ class World {
   }
 
   /**
-   * Checks for collisions between the character and enemies
-   */
-  checkCollisions() {
-    this.level.enemies.forEach((enemy) => {
-      if (this.character.isColliding(enemy)) {
-        if (enemy instanceof Posion) {
-          this.handlePoisonCollision(enemy);
-        } else if (enemy instanceof Coin) {
-          this.handleCoinCollision(enemy);
-        } else {
-          this.handleEnemyCollision(enemy);
-        }
-      }
-    });
-  }
-  
-  /**
-   * Checks for collisions between throwable objects and enemies
-   */
-  checkThrowableCollisions() {
-    this.throwableObject.forEach((bottle, index) => {
-      if (bottle.isColliding(this.level.enemies.find(e => e instanceof Endboss))) {        
-        this.level.enemies.find(e => e instanceof Endboss).hit('bottle');
-        this.throwableObject.splice(index, 1);
-      }
-      this.level.enemies.forEach((enemy) => {
-        if (bottle.isColliding(enemy) && enemy instanceof DestructibleEnemy && !enemy.isDying) {
-          enemy.die();
-          this.throwableObject.splice(index, 1);
-        }
-      });
-    });
-  }
-
-  /**
-   * Checks for collisions when the character is slapping enemies
-   */
-  checkSlapCollisions() {
-    if (this.isSlapActive()) {
-      const slapX = this.getSlapPosition();
-      const endboss = this.level.enemies.find(e => e instanceof Endboss);
-      if (endboss && this.isInSlapRange(endboss, slapX)) {
-        endboss.hit('slap');
-      }
-      this.level.enemies.forEach((enemy) => {
-        this.checkEnemySlapCollision(enemy, slapX);
-      });
-    }
-  }
-  
-  /**
-   * Checks if the character's slap attack is currently active
-   * @returns {boolean} True if the slap attack is active
-   */
-  isSlapActive() {
-    return this.character.animation.isSlapping && 
-           this.character.animation.currentSlapFrame >= 4 && 
-           this.character.animation.currentSlapFrame <= 7;
-  }
-  
-  /**
-   * Gets the x-coordinate for the slap attack hitbox
-   * @returns {number} The x-coordinate for slap collision detection
-   */
-  getSlapPosition() {
-    return this.character.otherDirection ? 
-      this.character.x - this.SLAP_RANGE :
-      this.character.x + this.character.width; 
-  }
-  
-  /**
-   * Checks if slap collision with enemy and handles it
-   * @param {MoveableObject} enemy - The enemy to check collision with
-   * @param {number} slapX - The x-coordinate of the slap position
-   */
-  checkEnemySlapCollision(enemy, slapX) {
-    if (enemy instanceof DestructibleEnemy) {
-      if (this.isInSlapRange(enemy, slapX)) {
-        enemy.die();
-      }
-    }
-  }
-  
-  /**
-   * Checks if an enemy is within slap attack range
-   * @param {MoveableObject} enemy - The enemy to check
-   * @param {number} slapX - The x-coordinate of the slap position
-   * @returns {boolean} True if enemy is in slap range
-   */
-  isInSlapRange(enemy, slapX) {
-    return this.isInHorizontalSlapRange(enemy, slapX) && 
-           this.isInVerticalSlapRange(enemy);
-  }
-  
-  /**
-   * Checks if an enemy is in horizontal slap range
-   * @param {MoveableObject} enemy - The enemy to check
-   * @param {number} slapX - The x-coordinate of the slap position
-   * @returns {boolean} True if enemy is in horizontal slap range
-   */
-  isInHorizontalSlapRange(enemy, slapX) {
-    return this.character.otherDirection ? 
-      (enemy.x + enemy.width >= slapX && enemy.x <= this.character.x) : 
-      (enemy.x <= slapX + this.SLAP_RANGE && enemy.x + enemy.width >= slapX); 
-  }
-  
-  /**
-   * Checks if an enemy is in vertical slap range
-   * @param {MoveableObject} enemy - The enemy to check
-   * @returns {boolean} True if enemy is in vertical slap range
-   */
-  isInVerticalSlapRange(enemy) {
-    return enemy.y + enemy.height >= this.character.y + 80 && 
-           enemy.y <= this.character.y + this.character.height - 40;
-  }
-
-  /**
-   * Removes dead fish enemies from the game world
+   * Removes dead fish from the game world after animation completes
    */
   cleanupDeadFish() {
     for (let i = this.level.enemies.length - 1; i >= 0; i--) {
@@ -229,44 +108,7 @@ class World {
   }
 
   /**
-   * Handles collision with poison bottles
-   * @param {Posion} poisonBottle - The poison bottle that collided with the character
-   */
-  handlePoisonCollision(poisonBottle) {
-    if (this.character.collectBottle()) {
-      this.removeFromLevel(poisonBottle);
-      this.updatePoisonBar();
-    }
-  }
-
-  /**
-   * Handles collision with coins
-   * @param {Coin} coin - The coin that collided with the character
-   */
-  handleCoinCollision(coin) {
-    if (this.character.collectCoins()) {
-      this.removeFromLevel(coin);
-      this.updateCoinBar();
-    }
-  }
-  
-  /**
-   * Handles collision with enemies
-   * @param {MoveableObject} enemy - The enemy that collided with the character
-   */
-  handleEnemyCollision(enemy) {
-    let hitType = 'poison'; 
-    let damage = 5; 
-    if (enemy instanceof GreenJellyFish || enemy instanceof PinkJellyFish) {
-      hitType = 'electric';
-      damage = 15; 
-    }
-    this.character.hit(hitType, damage);
-    this.statusBar.setPercentage(this.character.energy);
-  }
-  
-  /**
-   * Removes an object from the level
+   * Removes an object from the level's enemies array
    * @param {MoveableObject} object - The object to remove
    */
   removeFromLevel(object) {
@@ -277,7 +119,7 @@ class World {
   }
 
   /**
-   * Updates the poison bottle bar display
+   * Updates the poison bottle collection UI bar
    */
   updatePoisonBar() {
     let percentage = (this.character.bottles / this.character.maxBottles) * 100;
@@ -285,154 +127,11 @@ class World {
   }
 
   /**
-   * Updates the coin bar display
+   * Updates the coin collection UI bar
    */
   updateCoinBar() {
     let percentage = (this.character.coins / this.character.maxCoins) * 100;
     this.coinBar.setPercentage(percentage);
-  }
-
-  /**
-   * Draws the game world on the canvas
-   */
-  draw() {
-    if (!isGameActive) return;
-    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-    this.ctx.translate(this.camera_x, 0);
-    this.addObjectsToMap(this.level.backgroundObject);
-    this.addObjectsToMap(this.throwableObject); 
-    this.addObjectsToMap(this.level.enemies);
-    this.addToMap(this.character);
-    this.ctx.translate(-this.camera_x, 0);
-    this.addToMap(this.statusBar);
-    this.addToMap(this.coinBar);
-    this.addToMap(this.posionBar);
-    this.ctx.translate(this.camera_x, 0);
-    this.ctx.translate(-this.camera_x, 0);
-    let self = this;
-    if (isGameActive) {
-      requestAnimationFrame(function() {
-        self.draw();
-      });
-    }
-  }
-
-  /**
-   * Adds multiple objects to the map
-   * @param {MoveableObject[]} objects - Array of objects to add to the map
-   */
-  addObjectsToMap(objects) {
-    objects.forEach(o => {
-      this.addToMap(o);
-    });
-  }
-
-  /**
-   * Adds a single object to the map
-   * @param {MoveableObject} moveableObject - The object to add to the map
-   */
-  addToMap(moveableObject) {
-    this.ctx.save();    
-    if (moveableObject instanceof Character) {
-      this.drawRotatedObject(moveableObject);
-    } else {
-      this.drawObject(moveableObject);
-    }
-    this.ctx.restore();
-  }
-
-  /**
-   * Draws a rotated object on the canvas
-   * @param {MoveableObject} moveableObject - The object to draw with rotation
-   */
-  drawRotatedObject(moveableObject) {
-    this.moveToObjectCenter(moveableObject);
-    this.applyDirectionAndRotation(moveableObject);
-    this.moveToObjectTopLeft(moveableObject);
-    this.drawObjectAtOrigin(moveableObject);
-  }
-
-  /**
-   * Moves canvas context to the center of the object
-   * @param {MoveableObject} moveableObject - The object to center on
-   */
-  moveToObjectCenter(moveableObject) {
-    this.ctx.translate(
-      moveableObject.x + moveableObject.width/2, 
-      moveableObject.y + moveableObject.height/2
-    );
-  }
-
-  /**
-   * Applies direction flip and rotation transformation
-   * @param {MoveableObject} moveableObject - The object to transform
-   */
-  applyDirectionAndRotation(moveableObject) {
-    if (moveableObject.otherDirection) {
-      this.ctx.scale(-1, 1);
-    }
-    this.ctx.rotate(moveableObject.rotation * Math.PI / 180);
-  }
-
-  /**
-   * Moves canvas context to the top left of the object
-   * @param {MoveableObject} moveableObject - The object to position
-   */
-  moveToObjectTopLeft(moveableObject) {
-    this.ctx.translate(
-      -(moveableObject.width/2), 
-      -(moveableObject.height/2)
-    );
-  }
-
-  /**
-   * Draws the object at origin (0,0)
-   * @param {MoveableObject} moveableObject - The object to draw
-   */
-  drawObjectAtOrigin(moveableObject) {
-    moveableObject.draw(this.ctx, 0, 0);
-  }
-
-  /**
-   * Draws a standard object on the canvas
-   * @param {MoveableObject} moveableObject - The object to draw
-   */
-  drawObject(moveableObject) {
-    if (moveableObject.otherDirection) {
-      this.flipImageHorizontally(moveableObject);
-    }
-    this.drawAndFrameObject(moveableObject);
-    if (moveableObject.otherDirection) {
-      this.restoreOriginalDirection(moveableObject);
-    }
-  }
-
-  /**
-   * Flips an image horizontally for drawing
-   * @param {MoveableObject} moveableObject - The object to flip
-   */
-  flipImageHorizontally(moveableObject) {
-    this.ctx.save();
-    this.ctx.translate(moveableObject.width, 0);
-    this.ctx.scale(-1, 1);
-    moveableObject.x = moveableObject.x * -1;
-  }
-
-  /**
-   * Draws the object and optionally adds a frame
-   * @param {MoveableObject} moveableObject - The object to draw
-   */
-  drawAndFrameObject(moveableObject) {
-    moveableObject.draw(this.ctx);
-  }
-
-  /**
-   * Restores the original direction of an object after drawing
-   * @param {MoveableObject} moveableObject - The object to restore
-   */
-  restoreOriginalDirection(moveableObject) {
-    moveableObject.x = moveableObject.x * -1;
-    this.ctx.restore();
   }
 
   /**
@@ -445,7 +144,8 @@ class World {
   }
 
   /**
-   * Checks if speed boost should be activated
+   * Activates speed boost when 'E' key is pressed
+   * Uses collected coins to temporarily increase character speed
    */
   checkSpeedBoost() {
     if (this.keyboard.E) {
