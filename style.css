@@ -361,7 +361,7 @@ ul {
   background-color: rgba(100, 200, 255, 0.9);
 }
 
-@media only screen and (max-width: 1300px) {
+@media only screen and (max-width: 1390px) {
   .img_position_container {
     justify-content: flex-end;
     gap: 10px;

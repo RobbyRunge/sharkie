@@ -126,7 +126,7 @@ function toggleSound() {
  */
 function handleFullscreen() {
   const canvas = document.getElementById('game_container');
-  if (!document.fullscreenElement && window.innerWidth < 1300) {
+  if (!document.fullscreenElement && window.innerWidth < 1390) {
     openFullscreen(canvas);
   } else {
     closeFullscreen();
