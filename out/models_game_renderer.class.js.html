@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: models/game_renderer.class.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: models/game_renderer.class.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>class GameRenderer {
+  constructor(world) {
+    this.world = world;
+  }
+
+  /**
+   * Main draw loop that renders the entire game scene
+   * Uses requestAnimationFrame for smooth animation
+   */
+  draw() {
+    if (!isGameActive) return;
+    
+    this.world.ctx.clearRect(0, 0, this.world.canvas.width, this.world.canvas.height);
+    this.world.ctx.translate(this.world.camera_x, 0);
+    
+    this.addObjectsToMap(this.world.level.backgroundObject);
+    this.addObjectsToMap(this.world.throwableObject); 
+    this.addObjectsToMap(this.world.level.enemies);
+    this.addToMap(this.world.character);
+    
+    this.world.ctx.translate(-this.world.camera_x, 0);
+    
+    // Draw UI elements (fixed position on screen)
+    this.addToMap(this.world.statusBar);
+    this.addToMap(this.world.coinBar);
+    this.addToMap(this.world.posionBar);
+    
+    this.world.ctx.translate(this.world.camera_x, 0);
+    this.world.ctx.translate(-this.world.camera_x, 0);
+    
+    if (isGameActive) {
+      requestAnimationFrame(() => this.draw());
+    }
+  }
+
+  /**
+   * Adds multiple objects to the game canvas
+   * @param {Array&lt;MoveableObject>} objects - The array of objects to render
+   */
+  addObjectsToMap(objects) {
+    objects.forEach(o => {
+      this.addToMap(o);
+    });
+  }
+
+  /**
+   * Adds a single object to the game canvas with appropriate transformations
+   * @param {MoveableObject} moveableObject - The object to render
+   */
+  addToMap(moveableObject) {
+    this.world.ctx.save();    
+    if (moveableObject instanceof Character) {
+      this.drawRotatedObject(moveableObject);
+    } else {
+      this.drawObject(moveableObject);
+    }
+    this.world.ctx.restore();
+  }
+
+  /**
+   * Draws an object that might be rotated (like the character)
+   * @param {MoveableObject} moveableObject - The object to render with rotation
+   */
+  drawRotatedObject(moveableObject) {
+    this.moveToObjectCenter(moveableObject);
+    this.applyDirectionAndRotation(moveableObject);
+    this.moveToObjectTopLeft(moveableObject);
+    this.drawObjectAtOrigin(moveableObject);
+  }
+
+  /**
+   * Moves the canvas context to the center of an object
+   * @param {MoveableObject} moveableObject - The target object
+   */
+  moveToObjectCenter(moveableObject) {
+    this.world.ctx.translate(
+      moveableObject.x + moveableObject.width/2, 
+      moveableObject.y + moveableObject.height/2
+    );
+  }
+
+  /**
+   * Applies flipping and rotation transformations
+   * @param {MoveableObject} moveableObject - The target object
+   */
+  applyDirectionAndRotation(moveableObject) {
+    if (moveableObject.otherDirection) {
+      this.world.ctx.scale(-1, 1);
+    }
+    this.world.ctx.rotate(moveableObject.rotation * Math.PI / 180);
+  }
+
+  /**
+   * Moves the canvas context back to the top-left corner of an object
+   * @param {MoveableObject} moveableObject - The target object
+   */
+  moveToObjectTopLeft(moveableObject) {
+    this.world.ctx.translate(
+      -(moveableObject.width/2), 
+      -(moveableObject.height/2)
+    );
+  }
+
+  /**
+   * Draws the object at the current origin (0,0)
+   * @param {MoveableObject} moveableObject - The object to render
+   */
+  drawObjectAtOrigin(moveableObject) {
+    moveableObject.draw(this.world.ctx, 0, 0);
+  }
+
+  /**
+   * Draws a regular (non-rotated) object
+   * @param {MoveableObject} moveableObject - The object to render
+   */
+  drawObject(moveableObject) {
+    if (moveableObject.otherDirection) {
+      this.flipImageHorizontally(moveableObject);
+    }
+    this.drawAndFrameObject(moveableObject);
+    if (moveableObject.otherDirection) {
+      this.restoreOriginalDirection(moveableObject);
+    }
+  }
+
+  /**
+   * Flips an image horizontally for objects facing left
+   * @param {MoveableObject} moveableObject - The object to flip
+   */
+  flipImageHorizontally(moveableObject) {
+    this.world.ctx.save();
+    this.world.ctx.translate(moveableObject.width, 0);
+    this.world.ctx.scale(-1, 1);
+    moveableObject.x = moveableObject.x * -1;
+  }
+
+  /**
+   * Draws the object and its optional frame/border
+   * @param {MoveableObject} moveableObject - The object to render
+   */
+  drawAndFrameObject(moveableObject) {
+    moveableObject.draw(this.world.ctx);
+  }
+
+  /**
+   * Restores the original direction after drawing a flipped object
+   * @param {MoveableObject} moveableObject - The flipped object
+   */
+  restoreOriginalDirection(moveableObject) {
+    moveableObject.x = moveableObject.x * -1;
+    this.world.ctx.restore();
+  }
+}</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="BackgroundObject.html">BackgroundObject</a></li><li><a href="Character.html">Character</a></li><li><a href="CharacterAnimation.html">CharacterAnimation</a></li><li><a href="Coin.html">Coin</a></li><li><a href="CoinBar.html">CoinBar</a></li><li><a href="Endboss.html">Endboss</a></li><li><a href="GreenFish.html">GreenFish</a></li><li><a href="GreenJellyFish.html">GreenJellyFish</a></li><li><a href="Level.html">Level</a></li><li><a href="LilaJellyFish.html">LilaJellyFish</a></li><li><a href="OrangeFish.html">OrangeFish</a></li><li><a href="PinkJellyFish.html">PinkJellyFish</a></li><li><a href="Posion.html">Posion</a></li><li><a href="PosionBar.html">PosionBar</a></li><li><a href="RedFish.html">RedFish</a></li><li><a href="StatusBar.html">StatusBar</a></li><li><a href="ThrowableObject.html">ThrowableObject</a></li><li><a href="YellowJellyFish.html">YellowJellyFish</a></li></ul><h3>Global</h3><ul><li><a href="global.html#checkOrientation">checkOrientation</a></li><li><a href="global.html#closeFullscreen">closeFullscreen</a></li><li><a href="global.html#closeOverlay">closeOverlay</a></li><li><a href="global.html#getGameOverTemplate">getGameOverTemplate</a></li><li><a href="global.html#getWinTemplate">getWinTemplate</a></li><li><a href="global.html#goBackToStartscreen">goBackToStartscreen</a></li><li><a href="global.html#handleBackgroundClick">handleBackgroundClick</a></li><li><a href="global.html#handleFullscreen">handleFullscreen</a></li><li><a href="global.html#hideAllContentOverlays">hideAllContentOverlays</a></li><li><a href="global.html#hideBackgroundOverlay">hideBackgroundOverlay</a></li><li><a href="global.html#hideCloseButton">hideCloseButton</a></li><li><a href="global.html#init">init</a></li><li><a href="global.html#initLevel">initLevel</a></li><li><a href="global.html#loadSounds">loadSounds</a></li><li><a href="global.html#openFullscreen">openFullscreen</a></li><li><a href="global.html#openOverlay">openOverlay</a></li><li><a href="global.html#removeClassesAfterAnimation">removeClassesAfterAnimation</a></li><li><a href="global.html#resetWorldState">resetWorldState</a></li><li><a href="global.html#setStoppableInterval">setStoppableInterval</a></li><li><a href="global.html#showBackgroundOverlay">showBackgroundOverlay</a></li><li><a href="global.html#showCloseButton">showCloseButton</a></li><li><a href="global.html#showGameOverScreen">showGameOverScreen</a></li><li><a href="global.html#showSpecificOverlay">showSpecificOverlay</a></li><li><a href="global.html#showWinScreen">showWinScreen</a></li><li><a href="global.html#startGame">startGame</a></li><li><a href="global.html#toggleSound">toggleSound</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.4</a> on Thu May 01 2025 16:58:34 GMT+0200 (Mitteleuropäische Sommerzeit)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
