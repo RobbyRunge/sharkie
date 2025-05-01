@@ -1,6 +1,3 @@
-/**
- * Handles keyboard and touch input for game controls
- */
 class GameKeyboard {
   LEFT = false;
   RIGHT = false;
@@ -10,9 +7,6 @@ class GameKeyboard {
   D = false;
   E = false; 
 
-  /**
-   * Initializes the keyboard handler and binds key events
-   */
   constructor() {
     this.bindKeyPressEvents();
     this.bindButtonsPressEvents();
