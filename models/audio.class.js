@@ -95,26 +95,42 @@ class AudioManager {
     }
   }
 
-  /**
+/**
    * Toggles mute state for all sounds
    * @returns {boolean} The current mute state after toggling
    */
-  toggleMute() {
-    this.isMuted = !this.isMuted;
-    if (this.backgroundMusic) {
-      if (this.isMuted) {
-        this.backgroundMusic.pause();
-      } else {
-        this.backgroundMusic.play();
-      }
+toggleMute() {
+  this.isMuted = !this.isMuted;
+  this.updateBackgroundMusicState();
+  this.updatePlayingSoundsState();
+  return this.isMuted;
+}
+
+/**
+ * Updates background music based on current mute state
+ * @private
+ */
+updateBackgroundMusicState() {
+  if (this.backgroundMusic) {
+    if (this.isMuted) {
+      this.backgroundMusic.pause();
+    } else {
+      this.backgroundMusic.play();
     }
-    for (let sound in this.playingSounds) {
-      if (this.isMuted) {
-        this.playingSounds[sound].pause();
-      } else {
-        this.playingSounds[sound].play();
-      }
-    }
-    return this.isMuted;
   }
+}
+
+/**
+ * Updates all currently playing sounds based on current mute state
+ * @private
+ */
+updatePlayingSoundsState() {
+  for (let sound in this.playingSounds) {
+    if (this.isMuted) {
+      this.playingSounds[sound].pause();
+    } else {
+      this.playingSounds[sound].play();
+    }
+  }
+}
 }
