@@ -1,25 +1,10 @@
 class CharacterAnimation {
   idleTime = 0;
-  isInSleepMode = false;
-  sleepCycleComplete = false;
-  currentSleepFrame = 0;
-  isHit = false;
-  hitTime = 0;
-  hitDuration = 300;
-  hitType = 'poison'; 
   isSlapping = false;
   currentSlapFrame = 0;
   slapComplete = false;
-  isShooting = false;
-  currentShootingFrame = 0;
-  shootingTime = 0;
-  shootingDuration = 350;
-  shootingComplete = false;
-  canShoot = true;
-  shootingProcessed = false;
   currentDeadFrame = 0;
   deathAnimationComplete = false;
-  snoringTimeoutId = null;
   isMovementSoundPlaying = false;
   animationSpeed = {
     swimming: 100,
@@ -39,7 +24,6 @@ class CharacterAnimation {
   };
   character;
 
-  // Image arrays now come from AnimationAssets
   IMAGES_STAND;
   IMAGES_SWIMMING;
   IMAGES_SLEEP;
@@ -105,7 +89,7 @@ class CharacterAnimation {
     setStoppableInterval(() => {
       if (!isGameActive) return;
       const now = new Date().getTime();
-      const wasHit = this.isHit; 
+      const wasHit = this.hitHandler.getIsHitState(); 
       this.determineAndPlayAnimation(now, wasHit);
     }, 100);
   }
@@ -118,8 +102,8 @@ class CharacterAnimation {
   determineAndPlayAnimation(now, wasHit) {
     if (this.character.isDead()) {
       this.handleDeathState(wasHit);
-    } else if (this.isHit) {
-      this.handleHitAnimation(now);
+    } else if (this.hitHandler.getIsHitState()) {
+      this.hitHandler.handleHitAnimation(now);
     } else {
       this.handleNormalState(now, wasHit);
     }
@@ -131,7 +115,7 @@ class CharacterAnimation {
    */
   handleDeathState(wasHit) {
     if (wasHit) {
-      this.stopHitSounds();
+      this.hitHandler.stopHitSounds();
     }
     this.handleDeadAnimation();
   }
@@ -143,26 +127,17 @@ class CharacterAnimation {
    */
   handleNormalState(now, wasHit) {
     if (wasHit) {
-      this.stopHitSounds();
+      this.hitHandler.stopHitSounds();
     }
     if (this.isSlapping) {
       this.handleSlapingAnimation(now);
-    } else if (this.isShooting) {
-      this.handleShootingAnimation(now);
+    } else if (this.shootingHandler.getIsShootingState()) {
+      this.shootingHandler.handleShootingAnimation(now);
     } else if (this.character.isMoving()) {
       this.handleMovementAnimation(now);
     } else {
       this.handleIdleAnimation(now);
     }
-  }
-
-  /**
-   * Helper method to stop any active hit sounds
-   */
-  stopHitSounds() {
-    audioManager.stopSound('electric_shock');
-    audioManager.stopSound('normal_damage');
-    this.hitTime = 0;
   }
 
   /**
@@ -178,14 +153,6 @@ class CharacterAnimation {
       this.character.world.stopGame();
       showGameOverScreen();
     }
-  }
-
-  /**
-   * Handles hit animation
-   * @param {number} now - Current timestamp
-   */
-  handleHitAnimation(now) {
-    this.hitHandler.handleHitAnimation(now);
   }
 
   /**
@@ -237,14 +204,6 @@ class CharacterAnimation {
   }
 
   /**
-   * Handles shooting animation
-   * @param {number} now - Current timestamp
-   */
-  handleShootingAnimation(now) {
-    this.shootingHandler.handleShootingAnimation(now);
-  }
-
-  /**
    * Handles swimming animation when character is moving
    * @param {number} now - Current timestamp
    */
@@ -254,11 +213,10 @@ class CharacterAnimation {
       audioManager.setVolume('movement', 0.1);
       this.isMovementSoundPlaying = true;
     }
-    
-    if (this.isInSleepMode) {
-      this.exitSleepMode();
+    if (this.sleepHandler.getIsInSleepMode()) {
+      this.sleepHandler.exitSleepMode();
     }
-    this.idleTime = 0;
+    this.sleepHandler.resetIdleTime();
     if (now - this.lastAnimationUpdate.swimming >= this.animationSpeed.swimming) {
       this.playCharacterAnimation(this.IMAGES_SWIMMING);
       this.lastAnimationUpdate.swimming = now;
@@ -286,16 +244,7 @@ class CharacterAnimation {
    * Exits sleep animation mode
    */
   exitSleepMode() {
-    if (this.isInSleepMode) {
-      this.isInSleepMode = false;
-      this.sleepCycleComplete = false;
-      this.currentSleepFrame = 0;
-      if (this.snoringTimeoutId) {
-        clearTimeout(this.snoringTimeoutId);
-        this.snoringTimeoutId = null;
-      }
-      audioManager.stopSound('snoring');
-    }
+    this.sleepHandler.exitSleepMode();
   }
 
   /**

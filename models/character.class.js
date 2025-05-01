@@ -150,10 +150,8 @@ class Character extends MoveableObject {
    * @returns {boolean} True if hit was triggered
    */
   triggerHit(hitType = 'poison') {
-    if (!this.isDead() && !this.animation.isHit) {
-      this.animation.isHit = true;
-      this.animation.hitTime = 0;
-      this.animation.hitType = hitType; 
+    if (!this.isDead() && !this.animation.hitHandler.getIsHitState()) {
+      this.animation.hitHandler.setHitState(true, hitType);
       return true;
     }
     return false;
@@ -176,15 +174,12 @@ class Character extends MoveableObject {
    */
   startSlapping() {
     if (!this.animation.isSlapping) {
-      if (this.animation.isInSleepMode) {
+      if (this.animation.sleepHandler.getIsInSleepMode()) {
         this.animation.exitSleepMode();
       }
       audioManager.playSound('slap');
       audioManager.setVolume('slap', 0.3);
-      this.animation.idleTime = 0;
-      this.animation.isInSleepMode = false;
-      this.animation.sleepCycleComplete = false;
-      this.animation.currentSleepFrame = 0;
+      this.animation.sleepHandler.resetIdleTime();
       this.animation.isSlapping = true;
       this.animation.currentSlapFrame = 0;
       this.animation.slapComplete = false;
@@ -206,20 +201,15 @@ class Character extends MoveableObject {
    * @returns {boolean} True if shooting started
    */
   startShooting() {
-    if (this.bottles > 0 && !this.animation.isShooting && this.animation.canShoot) {
-      if (this.animation.isInSleepMode) {
+    if (this.bottles > 0 && !this.animation.shootingHandler.getIsShootingState() && this.animation.shootingHandler.canShoot) {
+      if (this.animation.sleepHandler.getIsInSleepMode()) {
         audioManager.stopSound('snoring');
       }
       setTimeout(() => {
         audioManager.playSound('bubble_shoot', false);
         audioManager.setVolume('bubble_shoot', 0.3);
       }, 760);
-      this.animation.isShooting = true;
-      this.animation.canShoot = false;
-      this.animation.shootingComplete = false;
-      this.animation.shootingProcessed = false;
-      this.animation.shootingTime = 0;
-      this.animation.currentShootingFrame = 0;
+      this.animation.shootingHandler.setShootingState(true);
       return true;
     }
     return false;
@@ -229,17 +219,10 @@ class Character extends MoveableObject {
    * Resets the shooting state
    */
   resetShootingState() {
-    this.animation.idleTime = 0;
-    this.animation.isInSleepMode = false;
-    this.animation.sleepCycleComplete = false;
-    this.animation.currentSleepFrame = 0;
-    this.animation.isShooting = false;
-    this.animation.shootingTime = 0;
-    this.animation.shootingComplete = false;
-    this.animation.shootingProcessed = false;
-    this.animation.currentShootingFrame = 0;
+    this.animation.sleepHandler.resetIdleTime();
+    this.animation.shootingHandler.resetShootingState();
     setTimeout(() => {
-      this.animation.canShoot = true;
+      this.animation.shootingHandler.canShoot = true;
     }, 200);
   }
 

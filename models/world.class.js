@@ -75,13 +75,13 @@ class World {
    */
   checkCreateProjectile() {
     const canCreateProjectile = 
-      this.character.animation.shootingComplete && 
-      !this.character.animation.shootingProcessed && 
+      this.character.animation.shootingHandler.shootingComplete && 
+      !this.character.animation.shootingHandler.shootingProcessed && 
       this.character.useBottle();
     if (canCreateProjectile) {
       this.createAndAddProjectile();
       this.updatePoisonBar();
-      this.character.animation.shootingProcessed = true;
+      this.character.animation.shootingHandler.shootingProcessed = true;
     }
   }
   
