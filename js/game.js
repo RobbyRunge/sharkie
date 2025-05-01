@@ -47,6 +47,22 @@ function init() {
   initLevel();
   canvas = document.getElementById("canvas");
   world = new World(canvas, keyboard);
+  updateSoundIconDisplay();
+}
+
+/**
+ * Updates the sound icon appearance based on the current mute state
+ * Changes the icon between sound-on and sound-off SVG images
+ * Used on initialization and after toggling sound state
+ * @returns {void}
+ */
+function updateSoundIconDisplay() {
+  const soundIcon = document.getElementById('sound_icon');
+  if (soundIcon && audioManager && audioManager.isMuted) {
+    soundIcon.src = './img/assets/sound-off-svgrepo-com.svg';
+  } else if (soundIcon) {
+    soundIcon.src = './img/assets/sound-svgrepo-com.svg';
+  }
 }
 
 /**

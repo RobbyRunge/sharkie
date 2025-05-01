@@ -3,7 +3,7 @@ class AudioManager {
     this.sounds = {};
     this.playingSounds = {};
     this.backgroundMusic = null;
-    this.isMuted = false;
+    this.isMuted = this.loadMuteStateFromStorage();
   }
 
   /**
@@ -95,42 +95,61 @@ class AudioManager {
     }
   }
 
-/**
-   * Toggles mute state for all sounds
+  /**
+   * Loads the mute state from localStorage
+   * @returns {boolean} The saved mute state or false if not found
+   * @private
+   */
+  loadMuteStateFromStorage() {
+    const savedMuteState = localStorage.getItem('sharkie_muted');
+    return savedMuteState === 'true';
+  }
+
+  /**
+   * Saves the current mute state to localStorage
+   * @private
+   */
+  saveMuteStateToStorage() {
+    localStorage.setItem('sharkie_muted', this.isMuted);
+  }
+
+  /**
+   * Toggles mute state for all sounds and saves to localStorage
    * @returns {boolean} The current mute state after toggling
    */
-toggleMute() {
-  this.isMuted = !this.isMuted;
-  this.updateBackgroundMusicState();
-  this.updatePlayingSoundsState();
-  return this.isMuted;
-}
+  toggleMute() {
+    this.isMuted = !this.isMuted;
+    this.updateBackgroundMusicState();
+    this.updatePlayingSoundsState();
+    this.saveMuteStateToStorage();
+    return this.isMuted;
+  }
 
-/**
- * Updates background music based on current mute state
- * @private
- */
-updateBackgroundMusicState() {
-  if (this.backgroundMusic) {
-    if (this.isMuted) {
-      this.backgroundMusic.pause();
-    } else {
-      this.backgroundMusic.play();
+  /**
+   * Updates background music based on current mute state
+   * @private
+   */
+  updateBackgroundMusicState() {
+    if (this.backgroundMusic) {
+      if (this.isMuted) {
+        this.backgroundMusic.pause();
+      } else {
+        this.backgroundMusic.play();
+      }
     }
   }
-}
 
-/**
- * Updates all currently playing sounds based on current mute state
- * @private
- */
-updatePlayingSoundsState() {
-  for (let sound in this.playingSounds) {
-    if (this.isMuted) {
-      this.playingSounds[sound].pause();
-    } else {
-      this.playingSounds[sound].play();
+  /**
+   * Updates all currently playing sounds based on current mute state
+   * @private
+   */
+  updatePlayingSoundsState() {
+    for (let sound in this.playingSounds) {
+      if (this.isMuted) {
+        this.playingSounds[sound].pause();
+      } else {
+        this.playingSounds[sound].play();
+      }
     }
   }
-}
 }
