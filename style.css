@@ -27,6 +27,11 @@ canvas {
   display: block;
 }
 
+a {
+  text-decoration: none;
+  color: rgba(0, 0, 0, 1);
+}
+
 #game_container:fullscreen {
   display: flex;
   justify-content: center;
@@ -180,7 +185,7 @@ ul {
   left: 0;
   right: 0;
   width: 100%;
-  max-width: 720px; /* Match your canvas width */
+  max-width: 720px;
   margin: 0 auto;
   padding: 0 15px;
   box-sizing: border-box;
@@ -263,7 +268,7 @@ ul {
 
 #win_screen h1 {
   margin-bottom: 20px;
-  color: gold; /* Make the win message gold colored */
+  color: gold;
 }
 
 #win_screen p {
