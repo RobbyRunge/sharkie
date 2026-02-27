@@ -46,81 +46,81 @@ Sharkie is a 2D underwater adventure game developed using HTML5, CSS3, and JavaS
 
 ```
 sharkie/
-├── audio/ # Sound effects and background music
+├── audio/                      # Sound effects and background music
 │ ├── background_sound.mp3
 │ ├── bubble_shoot_sound.mp3
 │ ├── collect_coin.mp3
 │ ├── fin_slap_sound.mp3
 │ └── ... (other audio files)
 |
-├── fonts/ # Custom fonts
+├── fonts/                  # Custom fonts
 │ └── Super_Water.ttf
 |
-├── img/ # Game graphics and sprites
-│ ├── 1.Sharkie/ # Main character sprites
-│ │ ├── 1.IDLE/ # Idle animation frames
-│ │ ├── 2.Long_IDLE/ # Long idle animation
-│ │ ├── 3.Swim/ # Swimming animation
-│ │ ├── 4.Attack/ # Attack animations
-│ │ └── 5.Hurt/ # Hurt animation
-│ ├── 2.Enemy/ # Enemy sprites
-│ │ ├── 1.Puffer_fish/ # Puffer fish variations
-│ │ ├── 2.Jelly_fish/ # Jellyfish types
-│ │ └── 3.Final_Enemy/ # Endboss sprites
-│ ├── 3.Background/ # Background layers
-│ │ └── Layers/ # Parallax background layers
-│ ├── 4.Marcadores/ # UI elements and collectibles
-│ │ ├── 1. Coins/ # Coin animation frames
-│ │ ├── green/ # Health and status bars
-│ │ └── purple/ # Poison bottle bars
-│ └── assets/ # UI icons and assets
+├── img/                   # Game graphics and sprites
+│ ├── 1.Sharkie/           # Main character sprites
+│ │ ├── 1.IDLE/            # Idle animation frames
+│ │ ├── 2.Long_IDLE/       # Long idle animation
+│ │ ├── 3.Swim/            # Swimming animation
+│ │ ├── 4.Attack/          # Attack animations
+│ │ └── 5.Hurt/            # Hurt animation
+│ ├── 2.Enemy/             # Enemy sprites
+│ │ ├── 1.Puffer_fish/     # Puffer fish variations
+│ │ ├── 2.Jelly_fish/      # Jellyfish types
+│ │ └── 3.Final_Enemy/     # Endboss sprites
+│ ├── 3.Background/        # Background layers
+│ │ └── Layers/            # Parallax background layers
+│ ├── 4.Marcadores/        # UI elements and collectibles
+│ │ ├── 1. Coins/          # Coin animation frames
+│ │ ├── green/             # Health and status bars
+│ │ └── purple/            # Poison bottle bars
+│ └── assets/              # UI icons and assets
 |
-├── js/ # Main JavaScript files
-│ ├── game.js # Game initialization and main loop
-│ ├── menu.js # Menu system and overlays
-│ └── template.js # HTML templates for game screens
+├── js/                # Main JavaScript files
+│ ├── game.js          # Game initialization and main loop
+│ ├── menu.js          # Menu system and overlays
+│ └── template.js      # HTML templates for game screens
 |
-├── levels/ # Level configuration
-│ └── level_1.js # First level setup with enemies and background
+├── levels/            # Level configuration
+│ └── level_1.js       # First level setup with enemies and background
 |
-├── models/ # Game object classes
-│ ├── animation_assets.class.js # Animation management
-│ ├── audio.class.js # Audio system management
-│ ├── background_object.class.js # Background rendering
-│ ├── character.class.js # Main player character
-│ ├── character_animation.class.js # Character animations
-│ ├── coin.class.js # Collectible coins
-│ ├── coin_bar.class.js # Coin counter UI
-│ ├── collision_handler.class.js # Collision detection
-│ ├── destructible_enemy.class.js # Base enemy class
-│ ├── drawable_object.class.js # Base drawable object
-│ ├── endboss.class.js # Final boss enemy
-│ ├── game_renderer.class.js # Game rendering system
-│ ├── green_fish.class.js # Green fish enemy
-│ ├── hit_animation_handler.class.js # Hit effect animations
-│ ├── keyboard.class.js # Input handling
-│ ├── level.class.js # Level structure
-│ ├── lila_jelly_fish.class.js # Purple jellyfish
-│ ├── moveable_object.class.js # Base moveable object
-│ ├── orange_fish.class.js # Orange fish enemy
-│ ├── pink_jelly_fish.class.js # Pink jellyfish
-│ ├── posion.class.js # Poison bottle collectible
-│ ├── posion_bar.class.js # Poison bottle counter
-│ ├── red_fish.class.js # Red fish enemy
-│ ├── shooting_animation_handler.class.js # Shooting animations
-│ ├── sleep_animation_handler.class.js # Idle animations
-│ ├── status_bar.class.js # Health bar UI
-│ ├── throwable_object.class.js # Projectile system
-│ ├── world.class.js # Game world management
-│ └── yellow_jelly_fish.class.js # Yellow jellyfish
+├── models/                                # Game object classes
+│ ├── animation_assets.class.js            # Animation management
+│ ├── audio.class.js                       # Audio system management
+│ ├── background_object.class.js           # Background rendering
+│ ├── character.class.js                   # Main player character
+│ ├── character_animation.class.js         # Character animations
+│ ├── coin.class.js                        # Collectible coins
+│ ├── coin_bar.class.js                    # Coin counter UI
+│ ├── collision_handler.class.js           # Collision detection
+│ ├── destructible_enemy.class.js          # Base enemy class
+│ ├── drawable_object.class.js             # Base drawable object
+│ ├── endboss.class.js                     # Final boss enemy
+│ ├── game_renderer.class.js               # Game rendering system
+│ ├── green_fish.class.js                  # Green fish enemy
+│ ├── hit_animation_handler.class.js       # Hit effect animations
+│ ├── keyboard.class.js                    # Input handling
+│ ├── level.class.js                       # Level structure
+│ ├── lila_jelly_fish.class.js             # Purple jellyfish
+│ ├── moveable_object.class.js             # Base moveable object
+│ ├── orange_fish.class.js                 # Orange fish enemy
+│ ├── pink_jelly_fish.class.js             # Pink jellyfish
+│ ├── posion.class.js                      # Poison bottle collectible
+│ ├── posion_bar.class.js                  # Poison bottle counter
+│ ├── red_fish.class.js                    # Red fish enemy
+│ ├── shooting_animation_handler.class.js  # Shooting animations
+│ ├── sleep_animation_handler.class.js     # Idle animations
+│ ├── status_bar.class.js                  # Health bar UI
+│ ├── throwable_object.class.js            # Projectile system
+│ ├── world.class.js                       # Game world management
+│ └── yellow_jelly_fish.class.js           # Yellow jellyfish
 |
-├── out/ # JSDoc generated documentation
-│ ├── index.html # Documentation homepage
+├── out/                                 # JSDoc generated documentation
+│ ├── index.html                         # Documentation homepage
 │ └── ... (other documentation files)
 |
-├── index.html # Main game file
-├── style.css # Main stylesheet
-└── README.md # Project documentation
+├── index.html       # Main game file
+├── style.css        # Main stylesheet
+└── README.md        # Project documentation
 ```
 
 ## <img src="https://img.icons8.com/color/24/000000/conference-call.png" style="vertical-align: middle;" height="24" width="24"/> Installation
