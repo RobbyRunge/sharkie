@@ -1,4 +1,4 @@
-name: Deploy to robby-runge.de
+name: Deploy to Server
 
 on:
   push:
